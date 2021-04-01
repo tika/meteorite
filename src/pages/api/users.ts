@@ -1,5 +1,10 @@
 import { createEndpoint } from '../../app/endpoint';
-import { loginSchema, registerSchema, updateSchema } from '../../schemas/users';
+import {
+  deleteSchema,
+  loginSchema,
+  registerSchema,
+  updateSchema,
+} from '../../schemas/users';
 import {
   DisplayedError,
   MissingData,
@@ -61,6 +66,8 @@ export default createEndpoint({
     const jwt = new JWT(rest);
     const token = jwt.sign();
 
+    res.setHeader('Set-Cookie', JWT.cookie(token));
+
     res.json(token);
   },
   PUT: async (req, res) => {
@@ -79,6 +86,25 @@ export default createEndpoint({
     const jwt = new JWT(rest);
     const token = jwt.sign();
 
+    res.setHeader('Set-Cookie', JWT.cookie(token));
+
     res.json(token);
+  },
+  DELETE: async (req, res) => {
+    const user = JWT.parseRequest(req);
+    const { password } = deleteSchema.parse(req.body);
+
+    if (!user) throw new NotFound('user');
+
+    const fullUser = await prisma.user.findFirst({ where: { id: user.id } });
+
+    if (!bcrypt.compareSync(password, fullUser!.password as string))
+      throw new DisplayedError(403, 'Incorrect password for user');
+
+    await prisma.user.delete({ where: { id: user.id } });
+
+    res.setHeader('Set-Cookie', JWT.logoutCookie());
+
+    res.json({ message: 'Sucessfully logged out' });
   },
 });

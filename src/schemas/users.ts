@@ -21,3 +21,7 @@ export const updateSchema = z.object({
   newPassword: password.optional(),
   password,
 });
+
+export const deleteSchema = z.object({
+  password,
+});

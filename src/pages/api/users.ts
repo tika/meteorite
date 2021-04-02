@@ -13,7 +13,7 @@ import {
 } from '../../app/exceptions';
 import bcrypt from 'bcrypt';
 import { JWT } from '../../app/jwt';
-import prisma from '../../app/prisma';
+import {prisma} from '../../app/prisma';
 
 export default createEndpoint({
   GET: async (req, res) => {

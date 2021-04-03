@@ -7,7 +7,7 @@ export default function Home() {
 
   return (
     <div
-      className={`min-h-screen mx-auto flex flex-col justify-center items-center ${
+      className={`min-h-screen mx-auto flex flex-col justify-center transition duration-200 items-center ${
         darkMode ? 'dark bg-black' : ''
       }`}
     >
@@ -21,23 +21,13 @@ export default function Home() {
       >
         Open App
       </button>
-      <div className='absolute bottom-4'>
+      <div className='absolute left-4 bottom-4'>
         <button
           type='button'
           onClick={() => setDarkMode(!darkMode)}
           className='inline-flex gap-1 items-center px-8 py-2 border border-transparent shadow-sm text-base font-medium rounded-full text-white bg-gray-800 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
         >
-          {darkMode ? (
-            <>
-              <Sun className='h-6' />
-              Light mode
-            </>
-          ) : (
-            <>
-              <Moon className='h-6' />
-              Dark side
-            </>
-          )}
+          {darkMode ? <Sun className='h-6' /> : <Moon className='h-6' />}
         </button>
       </div>
     </div>

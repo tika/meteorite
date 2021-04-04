@@ -1,19 +1,19 @@
-import { createEndpoint } from '../../app/endpoint';
+import { createEndpoint } from "../../app/endpoint";
 import {
   deleteSchema,
   loginSchema,
   registerSchema,
   updateSchema,
-} from '../../schemas/users';
+} from "../../schemas/users";
 import {
   DisplayedError,
   MissingData,
   NotFound,
   Unauthenticated,
-} from '../../app/exceptions';
-import bcrypt from 'bcrypt';
-import { JWT } from '../../app/jwt';
-import {prisma} from '../../app/prisma';
+} from "../../app/exceptions";
+import bcrypt from "bcrypt";
+import { JWT } from "../../app/jwt";
+import { prisma } from "../../app/prisma";
 
 export default createEndpoint({
   GET: async (req, res) => {
@@ -22,7 +22,7 @@ export default createEndpoint({
     });
 
     if (!user) {
-      throw new NotFound('user');
+      throw new NotFound("user");
     }
 
     const { password, email, ...rest } = user;
@@ -35,12 +35,12 @@ export default createEndpoint({
       req.body
     );
 
-    if (!user) throw new NotFound('user');
+    if (!user) throw new NotFound("user");
 
     const fullUser = await prisma.user.findFirst({ where: { id: user.id } });
 
     if (!bcrypt.compareSync(password, fullUser!.password as string))
-      throw new DisplayedError(403, 'Incorrect password for user');
+      throw new DisplayedError(403, "Incorrect password for user");
 
     await prisma.user.update({
       where: { id: user.id },
@@ -51,42 +51,50 @@ export default createEndpoint({
   },
   POST: async (req, res) => {
     const { username, email, password } = loginSchema.parse(req.body);
-    if (!username && !email) throw new MissingData('an email or username');
+    if (!username && !email) throw new MissingData("an email or username");
 
     const user = await prisma.user.findFirst({ where: { username, email } });
 
     if (!user)
-      throw new NotFound('User cannot be found with this username or email');
+      throw new NotFound("User cannot be found with this username or email");
 
     if (!bcrypt.compareSync(password, user.password as string))
-      throw new DisplayedError(400, 'Passwords do not match');
+      throw new DisplayedError(400, "Passwords do not match");
 
     const { password: _, ...rest } = user;
 
     const jwt = new JWT(rest);
     const token = jwt.sign();
 
-    res.setHeader('Set-Cookie', JWT.cookie(token));
+    res.setHeader("Set-Cookie", JWT.cookie(token));
 
     res.json(token);
   },
   PUT: async (req, res) => {
     const { username, email, password } = registerSchema.parse(req.body);
 
-    const newUser = await prisma.user.create({
-      data: {
-        username,
-        email,
-        password: bcrypt.hashSync(password, 10),
-      },
-    });
+    let newUser;
+    try {
+      newUser = await prisma.user.create({
+        data: {
+          username,
+          email,
+          password: bcrypt.hashSync(password, 10),
+        },
+      });
+    } catch (e) {
+      throw new DisplayedError(
+        409,
+        "This user with these details already exists"
+      );
+    }
 
     const { password: _, ...rest } = newUser;
 
     const jwt = new JWT(rest);
     const token = jwt.sign();
 
-    res.setHeader('Set-Cookie', JWT.cookie(token));
+    res.setHeader("Set-Cookie", JWT.cookie(token));
 
     res.json(token);
   },
@@ -94,17 +102,17 @@ export default createEndpoint({
     const user = JWT.parseRequest(req);
     const { password } = deleteSchema.parse(req.body);
 
-    if (!user) throw new NotFound('user');
+    if (!user) throw new NotFound("user");
 
     const fullUser = await prisma.user.findFirst({ where: { id: user.id } });
 
     if (!bcrypt.compareSync(password, fullUser!.password as string))
-      throw new DisplayedError(403, 'Incorrect password for user');
+      throw new DisplayedError(403, "Incorrect password for user");
 
     await prisma.user.delete({ where: { id: user.id } });
 
-    res.setHeader('Set-Cookie', JWT.logoutCookie());
+    res.setHeader("Set-Cookie", JWT.logoutCookie());
 
-    res.json({ message: 'Sucessfully logged out' });
+    res.json({ message: "Sucessfully logged out" });
   },
 });

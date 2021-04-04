@@ -4,9 +4,9 @@ const username = z.string().min(3);
 const password = z.string().min(6);
 
 export const registerSchema = z.object({
+  username,
   email: z.string().email(),
   password,
-  username,
 });
 
 export const loginSchema = z.object({

@@ -37,7 +37,7 @@ export class JWT {
   }
 
   public static parseRequest(
-    request: IncomingMessage & { cookies: { [key: string]: string } }
+    request: IncomingMessage & { cookies?: { [key: string]: string } }
   ) {
     if (!request.headers.cookie) {
       return null;

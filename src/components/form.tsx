@@ -1,18 +1,21 @@
-import { ZodObject } from 'zod';
-import { Infer } from 'zod/lib/src/types/base';
+import { ZodObject } from "zod";
+import { Infer } from "zod/lib/src/types/base";
 import React, {
   ChangeEventHandler,
   FocusEventHandler,
   ReactNode,
   useState,
-} from 'react';
-import toast from 'react-hot-toast';
+} from "react";
+import toast from "react-hot-toast";
+import { Warning } from "./svg/warning";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime";
 
-interface FormFieldProps {
+export interface FormFieldProps {
   onChange: ChangeEventHandler<HTMLInputElement>;
   onBlur: FocusEventHandler<HTMLInputElement>;
   name: string;
   disabled: boolean;
+  error: string | undefined;
 }
 
 interface FormProps<
@@ -22,7 +25,7 @@ interface FormProps<
   schema: T;
   buttonText?: string;
   submit(body: Infer<T>, clear: () => void): Promise<unknown>;
-  hiddenFields?: { [K in HiddenFields]: Infer<T['shape'][K]> };
+  hiddenFields?: { [K in HiddenFields]: Infer<T["shape"][K]> };
   components: {
     [K in Exclude<keyof Infer<T>, HiddenFields>]: (
       props: FormFieldProps
@@ -47,7 +50,7 @@ export function Form<T extends ZodObject<any, any>, H extends keyof Infer<T>>(
           ...props.hiddenFields,
         });
 
-        if ('error' in data) {
+        if ("error" in data) {
           const errorEntries = data.error.errors.map((error) => {
             return [error.path[0], error.message] as const;
           });
@@ -63,15 +66,15 @@ export function Form<T extends ZodObject<any, any>, H extends keyof Infer<T>>(
 
           await toast
             .promise(promise, {
-              success: 'Success',
-              loading: 'Loading',
-              error: (e) => e.message || 'Something went wrong...',
+              success: "Success",
+              loading: "Loading",
+              error: (e) => e.message || "Something went wrong...",
             })
             .catch(() => null)
             .finally(() => setLoading(false));
         }
       }}
-      className='flex flex-col gap-4 items-center'
+      className="flex flex-col items-center"
     >
       {Object.entries(props.schema.shape).map((entry, index) => {
         const [key] = entry;
@@ -91,12 +94,13 @@ export function Form<T extends ZodObject<any, any>, H extends keyof Infer<T>>(
           onBlur: (e) => {
             const result = props.schema.shape[key].safeParse(e.target.value);
 
-            if (result.error && e.target.value.trim() !== '') {
+            if (result.error && e.target.value.trim() !== "") {
               setErrors({ ...errors, [key]: result.error.errors[0].message });
-            } else if (e.target.value.trim() === '') {
+            } else if (e.target.value.trim() === "") {
               setErrors({ ...errors, [key]: undefined });
             }
           },
+          error: error,
         };
 
         const component =
@@ -106,37 +110,15 @@ export function Form<T extends ZodObject<any, any>, H extends keyof Infer<T>>(
           return null;
         }
 
-        return (
-          <ErrorMessage
-            error={error}
-            children={component(componentProps)}
-            key={index.toString()}
-          />
-        );
+        return component(componentProps);
       })}
 
       <button
-        type='button'
         disabled={loading}
-        className='inline-flex gap-1 items-center justify-center px-8 py-2 border border-transparent shadow-sm text-base font-medium rounded-full text-white bg-gray-800 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
+        className="inline-flex gap-1 items-center justify-center px-8 py-2 border border-transparent shadow-sm text-base font-medium rounded-full text-white bg-gray-800 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
       >
-        {props.buttonText ?? 'Submit'}
+        {props.buttonText ?? "Submit"}
       </button>
     </form>
-  );
-}
-
-function ErrorMessage({
-  error,
-  children,
-}: {
-  error?: string;
-  children: ReactNode;
-}) {
-  return (
-    <>
-      {error && <p>{error}</p>}
-      {children}
-    </>
   );
 }

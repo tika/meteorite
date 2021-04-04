@@ -1,72 +1,55 @@
-import { useEffect } from 'react';
-import { Toaster } from 'react-hot-toast';
-import { fetcher } from '../app/fetcher';
-import { Form } from '../components/form';
-import { registerSchema } from '../schemas/users';
+import { GetServerSideProps } from "next";
+import { fetcher } from "../app/fetcher";
+import { JWT } from "../app/jwt";
+import { Form } from "../components/form";
+import { Input } from "../components/input";
+import { registerSchema } from "../schemas/users";
 
 export default function Register() {
   return (
     <div
       className={`min-h-screen mx-auto flex flex-col justify-center transition duration-200 items-center`}
     >
-      <h1 className='font-black text-6xl dark:text-white'>Register</h1>
+      <h1 className="font-black text-6xl dark:text-white mb-8">Register</h1>
       <Form
         submit={async (body) => {
-          await fetcher('PUT', '/users', body);
+          await fetcher("PUT", "/users", body);
         }}
         components={{
           username: (p) => (
-            <div className='relative' {...p}>
-              <label
-                htmlFor='username'
-                className='block text-sm font-medium text-gray-700'
-              >
-                Username
-              </label>
-              <input
-                // name='username'
-                type='text'
-                {...p}
-                className='appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'
-              />
-            </div>
+            <Input type="text" label="Username" p={p} error={p.error} />
           ),
           email: (p) => (
-            <div className='relative' {...p}>
-              <label
-                htmlFor='email'
-                className='block text-sm font-medium text-gray-700'
-              >
-                Email address
-              </label>
-              <input
-                // name='email'
-                type='email'
-                {...p}
-                className='appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'
-              />
-            </div>
+            <Input type="email" label="Email address" p={p} error={p.error} />
           ),
           password: (p) => (
-            <div className='relative'>
-              <label
-                htmlFor='password'
-                className='block text-sm font-medium text-gray-700'
-              >
-                Password
-              </label>
-              <input
-                // name='password'
-                type='password'
-                {...p}
-                className='appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'
-              />
-            </div>
+            <Input
+              type="password"
+              label="Password"
+              p={p}
+              error={p.error}
+              isLast={true}
+            />
           ),
         }}
         schema={registerSchema}
-        buttonText='Register'
+        buttonText="Sign up"
       />
     </div>
   );
 }
+
+// export const getServerSideProps: GetServerSideProps = async (ctx) => {
+//   const user = JWT.parseRequest(ctx.req);
+
+//   if (user) {
+//     return {
+//       redirect: {
+//         destination: "/test",
+//         permanent: false,
+//       },
+//     };
+//   }
+
+//   return { props: {} };
+// };

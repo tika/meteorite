@@ -1,9 +1,17 @@
+import { GetServerSideProps } from "next";
+import { useRouter } from "next/dist/client/router";
 import { useState } from "react";
+import { JWT, JWTPayload } from "../app/jwt";
 import { Moon } from "../components/svg/moon";
 import { Sun } from "../components/svg/sun";
 
-export default function Home() {
+type HomeProps = {
+  user: JWTPayload | null;
+};
+
+export default function Home(props: HomeProps) {
   const [darkMode, setDarkMode] = useState(true);
+  const router = useRouter();
 
   return (
     <div
@@ -17,9 +25,10 @@ export default function Home() {
       </h2>
       <button
         type="button"
-        className="inline-flex text-white items-center px-6 py-3 border border-transparent text-base font-medium rounded-full shadow-sm text-white bg-theme-dark hover:bg-theme-light focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+        className="inline-flex text-white items-center px-6 py-3 border border-transparent text-base font-medium rounded-full shadow-s bg-theme-dark hover:bg-theme-light focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+        onClick={() => router.push(props.user ? "/app" : "/login")}
       >
-        Open App
+        {props.user ? "Open App" : "Login"}
       </button>
       <div className="absolute left-4 bottom-4">
         <button
@@ -33,3 +42,8 @@ export default function Home() {
     </div>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const user = JWT.parseRequest(ctx.req);
+  return { props: { user } };
+};

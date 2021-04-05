@@ -1,5 +1,6 @@
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/dist/client/router";
+import toast from "react-hot-toast";
 import { fetcher } from "../app/fetcher";
 import { JWT, JWTPayload } from "../app/jwt";
 
@@ -21,7 +22,12 @@ export default function App(props: AppProps) {
         Good {new Date().getHours() > 12 ? "afternoon" : "morning"}
       </h2>
       <button
-        onClick={() => fetcher("GET", "/logout").then(() => router.push("/"))}
+        onClick={() =>
+          fetcher("GET", "/logout").then(() => {
+            router.push("/");
+            toast.success(`Successfully logged out as ${props.user.username}!`);
+          })
+        }
       >
         Logout
       </button>

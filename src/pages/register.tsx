@@ -15,10 +15,9 @@ export default function Register() {
     >
       <h1 className="font-black text-6xl dark:text-white mb-8">Register</h1>
       <Form
-        submit={async (body) => {
-          await fetcher("PUT", "/users", body);
-          await router.push("/app");
-        }}
+        submit={(body) =>
+          fetcher("PUT", "/users", body).then(() => router.push("/app"))
+        }
         components={{
           username: (p) => (
             <Input type="text" label="Username" p={p} error={p.error} />

@@ -3,7 +3,7 @@ import { useRouter } from "next/dist/client/router";
 import { fetcher } from "../app/fetcher";
 import { JWT } from "../app/jwt";
 import { Form } from "../components/form";
-import { Input } from "../components/input";
+import { FormInput } from "../components/forminput";
 import { registerSchema } from "../schemas/users";
 
 export default function Register() {
@@ -20,13 +20,18 @@ export default function Register() {
         }
         components={{
           username: (p) => (
-            <Input type="text" label="Username" p={p} error={p.error} />
+            <FormInput type="text" label="Username" p={p} error={p.error} />
           ),
           email: (p) => (
-            <Input type="email" label="Email address" p={p} error={p.error} />
+            <FormInput
+              type="email"
+              label="Email address"
+              p={p}
+              error={p.error}
+            />
           ),
           password: (p) => (
-            <Input
+            <FormInput
               type="password"
               label="Password"
               p={p}

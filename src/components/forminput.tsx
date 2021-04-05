@@ -2,7 +2,7 @@ import React from "react";
 import { FormFieldProps } from "./form";
 import { Warning } from "./svg/warning";
 
-interface InputProps {
+interface FormInputProps {
   placeholder?: string;
   type?: string;
   label: string;
@@ -11,7 +11,13 @@ interface InputProps {
   isLast?: boolean;
 }
 
-export function Input({ placeholder, type, label, p, error }: InputProps) {
+export function FormInput({
+  placeholder,
+  type,
+  label,
+  p,
+  error,
+}: FormInputProps) {
   return (
     <div className="relative w-full">
       <label className="block text-sm font-semibold text-gray-700">

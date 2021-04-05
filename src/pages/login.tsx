@@ -3,7 +3,7 @@ import { useRouter } from "next/dist/client/router";
 import { fetcher } from "../app/fetcher";
 import { JWT } from "../app/jwt";
 import { Form } from "../components/form";
-import { Input } from "../components/input";
+import { FormInput } from "../components/forminput";
 import { loginSchema } from "../schemas/users";
 
 export default function Login() {
@@ -20,10 +20,10 @@ export default function Login() {
         }
         components={{
           username: (p) => (
-            <Input type="text" label="Username" p={p} error={p.error} />
+            <FormInput type="text" label="Username" p={p} error={p.error} />
           ),
           password: (p) => (
-            <Input
+            <FormInput
               type="password"
               label="Password"
               p={p}

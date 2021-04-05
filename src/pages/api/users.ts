@@ -50,13 +50,12 @@ export default createEndpoint({
     res.status(200);
   },
   POST: async (req, res) => {
-    const { username, email, password } = loginSchema.parse(req.body);
-    if (!username && !email) throw new MissingData("an email or username");
+    const { username, password } = loginSchema.parse(req.body);
+    if (!username) throw new MissingData("an email or username");
 
-    const user = await prisma.user.findFirst({ where: { username, email } });
+    const user = await prisma.user.findFirst({ where: { username } });
 
-    if (!user)
-      throw new NotFound("User cannot be found with this username or email");
+    if (!user) throw new NotFound("User cannot be found with this username");
 
     if (!bcrypt.compareSync(password, user.password as string))
       throw new DisplayedError(400, "Passwords do not match");
@@ -68,7 +67,7 @@ export default createEndpoint({
 
     res.setHeader("Set-Cookie", JWT.cookie(token));
 
-    res.json(token);
+    res.json({ token });
   },
   PUT: async (req, res) => {
     const { username, email, password } = registerSchema.parse(req.body);
@@ -96,7 +95,7 @@ export default createEndpoint({
 
     res.setHeader("Set-Cookie", JWT.cookie(token));
 
-    res.json(token);
+    res.json({ token });
   },
   DELETE: async (req, res) => {
     const user = JWT.parseRequest(req);

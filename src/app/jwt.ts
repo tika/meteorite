@@ -1,38 +1,42 @@
-import { User } from '@prisma/client';
-import { serialize, parse } from 'cookie';
-import * as jwt from 'jsonwebtoken';
-import dayjs from 'dayjs';
-import { isDev } from './constants';
-import { IncomingMessage } from 'http';
+import { User } from "@prisma/client";
+import { serialize, parse } from "cookie";
+import * as jwt from "jsonwebtoken";
+import dayjs from "dayjs";
+import { isDev } from "./constants";
+import { IncomingMessage } from "http";
 
-export type JWTPayload = Pick<User, 'id' | 'email'>;
+export type JWTPayload = Pick<User, "id" | "email" | "username">;
 
 export class JWT {
-  public static readonly SECRET_KEY = 'meteorite';
+  public static readonly SECRET_KEY = "meteorite";
   public readonly user;
 
-  constructor(user: Omit<User, 'password'>) {
+  constructor(user: Omit<User, "password">) {
     this.user = user;
   }
 
   public sign(): string {
-    const payload: JWTPayload = { id: this.user.id, email: this.user.email };
+    const payload: JWTPayload = {
+      id: this.user.id,
+      email: this.user.email,
+      username: this.user.username,
+    };
 
     return jwt.sign(payload, JWT.SECRET_KEY, {
-      expiresIn: '24h',
+      expiresIn: "24h",
     });
   }
 
   public static logoutCookie() {
-    return JWT.cookie('', new Date());
+    return JWT.cookie("", new Date());
   }
 
   public static cookie(token: string, expiry?: Date): string {
-    return serialize('token', token, {
+    return serialize("token", token, {
       httpOnly: true,
-      expires: expiry || dayjs().add(24, 'hours').toDate(),
+      expires: expiry || dayjs().add(24, "hours").toDate(),
       secure: !isDev,
-      path: '/',
+      path: "/",
     });
   }
 

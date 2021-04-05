@@ -4,27 +4,24 @@ import { fetcher } from "../app/fetcher";
 import { JWT } from "../app/jwt";
 import { Form } from "../components/form";
 import { Input } from "../components/input";
-import { registerSchema } from "../schemas/users";
+import { loginSchema } from "../schemas/users";
 
-export default function Register() {
+export default function Login() {
   const router = useRouter();
 
   return (
     <div
       className={`min-h-screen mx-auto flex flex-col justify-center transition duration-200 items-center`}
     >
-      <h1 className="font-black text-6xl dark:text-white mb-8">Register</h1>
+      <h1 className="font-black text-6xl dark:text-white mb-8">Login</h1>
       <Form
         submit={async (body) => {
-          await fetcher("PUT", "/users", body);
+          await fetcher("POST", "/users", body);
           await router.push("/app");
         }}
         components={{
           username: (p) => (
             <Input type="text" label="Username" p={p} error={p.error} />
-          ),
-          email: (p) => (
-            <Input type="email" label="Email address" p={p} error={p.error} />
           ),
           password: (p) => (
             <Input
@@ -36,8 +33,8 @@ export default function Register() {
             />
           ),
         }}
-        schema={registerSchema}
-        buttonText="Sign up"
+        schema={loginSchema}
+        buttonText="Login"
       />
     </div>
   );

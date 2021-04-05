@@ -1,8 +1,8 @@
-import { NextApiHandler } from 'next';
-import { isDev } from './constants';
-import { DisplayedError } from './exceptions';
+import { NextApiHandler } from "next";
+import { isDev } from "./constants";
+import { DisplayedError } from "./exceptions";
 
-export type Method = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
+export type Method = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
 
 export function createEndpoint<Resource>(
   methods: Partial<Record<Method, NextApiHandler<Resource>>>
@@ -10,11 +10,11 @@ export function createEndpoint<Resource>(
   const supportedMethods = Object.keys(methods);
 
   return async (req, res) => {
-    const handler = methods[(req.method || 'GET') as Method];
+    const handler = methods[(req.method || "GET") as Method];
 
     if (!handler) {
       return res.status(405).json({
-        message: `You must ${supportedMethods.join(', ')} to this endpoint!`,
+        message: `You must ${supportedMethods.join(", ")} to this endpoint!`,
       });
     }
 
@@ -27,7 +27,7 @@ export function createEndpoint<Resource>(
 
       res
         .status(500)
-        .json({ message: isDev ? e.message : 'Something went wrong.' });
+        .json({ message: isDev ? e.message : "Something went wrong." });
     }
   };
 }

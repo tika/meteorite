@@ -9,8 +9,6 @@ interface NewPostProps {
 }
 
 export function NewPost({ setIsPosting }: NewPostProps) {
-  const [caption, setCaption] = useState("");
-
   return (
     <div className="bg-white w-full h-full shadow-md p-4 rounded-md">
       <h2 className="font-medium text-2xl">Create new post</h2>

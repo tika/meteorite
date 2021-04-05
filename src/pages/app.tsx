@@ -18,33 +18,34 @@ export default function App(props: AppProps) {
     <div
       className={`min-h-screen mx-auto flex flex-col justify-center transition duration-200 items-center`}
     >
-      {isPosting ? (
-        <div className="flex justify-center align-center">
-          <NewPost setIsPosting={setIsPosting} />
-        </div>
-      ) : (
+      {isPosting && (
         <>
-          <h1 className="font-black text-6xl dark:text-white mb-4">
-            Hey, {props.user.username}
-          </h1>
-          <h2 className="font-medium text-2xl">
-            Good {new Date().getHours() > 12 ? "afternoon" : "morning"}
-          </h2>
-          <button onClick={() => setIsPosting(true)}>Create post</button>
-          <button
-            onClick={() =>
-              fetcher("GET", "/logout").then(() => {
-                router.push("/");
-                toast.success(
-                  `Successfully logged out as ${props.user.username}!`
-                );
-              })
-            }
-          >
-            Logout
-          </button>
+          <div className="absolute flex justify-center align-center z-30">
+            <NewPost setIsPosting={setIsPosting} />
+          </div>
+          <div
+            className="absolute w-screen h-screen z-10"
+            onClick={() => setIsPosting(false)}
+          />
         </>
       )}
+      <h1 className="font-black text-6xl dark:text-white mb-4">
+        Hey, {props.user.username}
+      </h1>
+      <h2 className="font-medium text-2xl">
+        Good {new Date().getHours() > 12 ? "afternoon" : "morning"}
+      </h2>
+      <button onClick={() => setIsPosting(true)}>Create post</button>
+      <button
+        onClick={() =>
+          fetcher("GET", "/logout").then(() => {
+            router.push("/");
+            toast.success(`Successfully logged out as ${props.user.username}!`);
+          })
+        }
+      >
+        Logout
+      </button>
     </div>
   );
 }

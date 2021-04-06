@@ -1,3 +1,4 @@
+import { Post } from ".prisma/client";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/dist/client/router";
 import { useState } from "react";
@@ -5,9 +6,11 @@ import toast from "react-hot-toast";
 import { fetcher } from "../app/fetcher";
 import { JWT, JWTPayload } from "../app/jwt";
 import { NewPost } from "../components/newpost";
+import { prisma } from "../app/prisma";
 
 type AppProps = {
   user: JWTPayload;
+  posts: Post[];
 };
 
 export default function App(props: AppProps) {
@@ -35,6 +38,20 @@ export default function App(props: AppProps) {
       <h2 className="font-medium text-2xl">
         Good {new Date().getHours() > 12 ? "afternoon" : "morning"}
       </h2>
+      <div>
+        <h1>Posts</h1>
+        <div className="flex flex-col gap-4 h-64 overflow-y-auto">
+          {props.posts.map((post) => (
+            <div className="bg-red-900" key={post.id}>
+              {post.caption!.split("\n").map((cap) => (
+                <h2>{cap}</h2>
+              ))}
+              <p>{post.id}</p>
+            </div>
+          ))}
+        </div>
+        <p>You have posted {props.posts.length} times</p>
+      </div>
       <button onClick={() => setIsPosting(true)}>Create post</button>
       <button
         onClick={() =>
@@ -62,5 +79,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     };
   }
 
-  return { props: { user } };
+  const posts = await prisma.post.findMany({ where: { authorId: user.id } });
+
+  return { props: { user, posts } };
 };

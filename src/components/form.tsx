@@ -1,21 +1,14 @@
 import { ZodObject } from "zod";
 import { Infer } from "zod/lib/src/types/base";
-import React, {
-  ChangeEventHandler,
-  FocusEventHandler,
-  ReactNode,
-  useState,
-} from "react";
+import React, { ChangeEventHandler, FocusEventHandler, useState } from "react";
 import toast from "react-hot-toast";
-import { Warning } from "./svg/warning";
-import { PrismaClientKnownRequestError } from "@prisma/client/runtime";
 
 export interface FormFieldProps {
-  onChange: ChangeEventHandler<HTMLInputElement>;
-  onBlur: FocusEventHandler<HTMLInputElement>;
+  onChange: ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement>;
+  onBlur: FocusEventHandler<HTMLTextAreaElement | HTMLInputElement>;
   name: string;
   disabled: boolean;
-  error: string | undefined;
+  error?: string;
 }
 
 interface FormProps<

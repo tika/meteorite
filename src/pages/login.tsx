@@ -1,10 +1,10 @@
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/dist/client/router";
-import { fetcher } from "../app/fetcher";
-import { JWT } from "../app/jwt";
-import { Form } from "../components/form";
-import { FormInput } from "../components/forminput";
-import { loginSchema } from "../schemas/users";
+import { fetcher } from "@app/fetcher";
+import { JWT } from "@app/jwt";
+import { Form } from "@components/form";
+import { FormInput } from "@components/forminput";
+import { loginSchema } from "@schemas/users";
 
 export default function Login() {
   const router = useRouter();

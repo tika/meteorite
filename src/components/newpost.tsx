@@ -1,6 +1,6 @@
 import React from "react";
-import { fetcher } from "../app/fetcher";
-import { createPostSchema } from "../schemas/posts";
+import { fetcher } from "@app/fetcher";
+import { createPostSchema } from "@schemas/posts";
 import { Form } from "./form";
 import { FormInput } from "./forminput";
 

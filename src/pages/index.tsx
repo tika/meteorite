@@ -1,9 +1,9 @@
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/dist/client/router";
 import { useState } from "react";
-import { JWT, JWTPayload } from "../app/jwt";
-import { Moon } from "../components/svg/moon";
-import { Sun } from "../components/svg/sun";
+import { JWT, JWTPayload } from "@app/jwt";
+import { Moon } from "@components/svg/moon";
+import { Sun } from "@components/svg/sun";
 
 type HomeProps = {
   user: JWTPayload | null;

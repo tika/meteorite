@@ -1,19 +1,14 @@
-import { createEndpoint } from "../../app/endpoint";
+import { createEndpoint } from "@app/endpoint";
 import {
   deleteSchema,
   loginSchema,
   registerSchema,
   updateSchema,
-} from "../../schemas/users";
-import {
-  DisplayedError,
-  MissingData,
-  NotFound,
-  Unauthenticated,
-} from "../../app/exceptions";
+} from "@schemas/users";
+import { DisplayedError, MissingData, NotFound } from "@app/exceptions";
 import bcrypt from "bcrypt";
-import { JWT } from "../../app/jwt";
-import { prisma } from "../../app/prisma";
+import { JWT } from "@app/jwt";
+import { prisma } from "@app/prisma";
 
 export default createEndpoint({
   GET: async (req, res) => {

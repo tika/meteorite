@@ -1,6 +1,5 @@
-import { serialize } from "cookie";
-import { createEndpoint } from "../../app/endpoint";
-import { JWT } from "../../app/jwt";
+import { createEndpoint } from "@app/endpoint";
+import { JWT } from "@app/jwt";
 
 export default createEndpoint({
   GET: async (req, res) => {

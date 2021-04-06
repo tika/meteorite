@@ -3,10 +3,10 @@ import { GetServerSideProps } from "next";
 import { useRouter } from "next/dist/client/router";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { fetcher } from "../app/fetcher";
-import { JWT, JWTPayload } from "../app/jwt";
-import { NewPost } from "../components/newpost";
-import { prisma } from "../app/prisma";
+import { fetcher } from "@app/fetcher";
+import { JWT, JWTPayload } from "@app/jwt";
+import { NewPost } from "@components/newpost";
+import { prisma } from "@app/prisma";
 
 type AppProps = {
   user: JWTPayload;

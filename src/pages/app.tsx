@@ -41,7 +41,7 @@ export default function App(props: AppProps) {
       </h2>
       <div>
         <h1>Posts</h1>
-        <div className="flex flex-col gap-4 h-64 overflow-y-auto">
+        <div className="flex flex-col gap-4 ">
           {props.posts.map((post) => (
             <PostElement post={post} key={post.id} />
           ))}

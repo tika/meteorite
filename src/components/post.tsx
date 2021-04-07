@@ -33,9 +33,15 @@ export function PostElement(props: PostProps) {
         <ClipLoader loading={!data} size={150} />
       ) : (
         <div key={props.key}>
-          <div className="mb-2">
+          <div className="mb-2 relative">
+            <h1
+              style={{ writingMode: "vertical-rl" }}
+              className="absolute bottom-6 font-bold text-white transform rotate-180"
+            >
+              @{data.username}
+            </h1>
             <img
-              src={images[2]}
+              src={images[1]}
               className="w-96 h-96 object-cover rounded-md"
             />
           </div>

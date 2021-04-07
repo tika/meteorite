@@ -49,10 +49,10 @@ export function PostElement(props: PostProps) {
           </div>
           <div className="w-96 flex flex-row items-start gap-2">
             <img src={profilePicture} className="w-16 rounded-md" />
-            <div className="flex flex-col gap-1">
+            <div className="flex flex-col gap-1 w-full">
               <p
                 onClick={() => !expanded && setExpanded(true)}
-                className={expanded ? "line-clamp-none" : "line-clamp-3"}
+                className={`line-clamp-${expanded ? "none" : "3"}`}
               >
                 {props.post.caption?.split("\n").map((line) => (
                   <p className="text-sm">{line}</p>

@@ -27,6 +27,8 @@ export function PostElement(props: PostProps) {
     "https://www.happybrainscience.com/wp-content/uploads/2017/07/derwent-morning-Cropped.jpg",
   ]);
 
+  const [expanded, setExpanded] = useState(false);
+
   return (
     <>
       {!data ? (
@@ -48,10 +50,15 @@ export function PostElement(props: PostProps) {
           <div className="w-96 flex flex-row items-start gap-2">
             <img src={profilePicture} className="w-16 rounded-md" />
             <div className="flex flex-col gap-1">
-              <p className="text-sm">
-                Have you ever seen a more perfect #summer spot? ✨😍
-                #outdoorliving (#regram: @oldsilvershed)
+              <p
+                onClick={() => !expanded && setExpanded(true)}
+                className={expanded ? "line-clamp-none" : "line-clamp-3"}
+              >
+                {props.post.caption?.split("\n").map((line) => (
+                  <p className="text-sm">{line}</p>
+                ))}
               </p>
+
               <div className="flex">
                 <Chat className="h-6" />
                 <Heart className="h-6" />

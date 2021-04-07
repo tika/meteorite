@@ -27,6 +27,7 @@ export function PostElement(props: PostProps) {
     "https://www.happybrainscience.com/wp-content/uploads/2017/07/derwent-morning-Cropped.jpg",
   ]);
 
+  const [index, setIndex] = useState(0);
   const [expanded, setExpanded] = useState(false);
 
   return (
@@ -35,20 +36,38 @@ export function PostElement(props: PostProps) {
         <ClipLoader loading={!data} size={150} />
       ) : (
         <div key={props.key}>
-          <div className="mb-2 relative">
+          <div className="mb-4 relative">
             <h1
               style={{ writingMode: "vertical-rl" }}
               className="absolute bottom-6 font-bold text-white transform rotate-180"
             >
               @{data.username}
             </h1>
-            <img
-              src={images[1]}
-              className="w-96 h-96 object-cover rounded-md"
-            />
+            <div className="absolute top-0 left-0 w-full h-full">
+              <button
+                className="w-full h-1/2 focus:outline-none"
+                onClick={() =>
+                  setIndex((index == 0 ? images.length : index) - 1)
+                }
+              />
+              <button
+                className="w-full h-1/2 focus:outline-none"
+                onClick={() =>
+                  setIndex(index == images.length - 1 ? 0 : index + 1)
+                }
+              />
+            </div>
+            <img src={images[index]} className="w-96 h-96 object-cover" />
           </div>
-          <div className="w-96 flex flex-row items-start gap-2">
-            <img src={profilePicture} className="w-16 rounded-md" />
+
+          <div className="w-96 flex flex-row items-start gap-4 self-center">
+            <div className="max-w-full max-h-sm">
+              <img
+                src={profilePicture}
+                className="w-20 h-20 max-w-none object-cover rounded-md"
+              />
+            </div>
+
             <div className="flex flex-col gap-1 w-full">
               <p
                 onClick={() => !expanded && setExpanded(true)}

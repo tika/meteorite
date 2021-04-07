@@ -6,6 +6,7 @@ import ClipLoader from "react-spinners/ClipLoader";
 import { Chat } from "@components/svg/chat";
 import { Heart } from "@components/svg/heart";
 import { Bookmark } from "@components/svg/bookmark";
+import { motion } from "framer-motion";
 
 interface PostProps {
   post: Post;
@@ -29,6 +30,7 @@ export function PostElement(props: PostProps) {
 
   const [index, setIndex] = useState(0);
   const [expanded, setExpanded] = useState(false);
+  const [startPos, setStartPos] = useState(0);
 
   return (
     <>
@@ -44,17 +46,27 @@ export function PostElement(props: PostProps) {
               @{data.username}
             </h1>
             <div className="absolute top-0 left-0 w-full h-full">
-              <button
-                className="w-full h-1/2 focus:outline-none"
-                onClick={() =>
-                  setIndex((index == 0 ? images.length : index) - 1)
-                }
-              />
-              <button
-                className="w-full h-1/2 focus:outline-none"
-                onClick={() =>
-                  setIndex(index == images.length - 1 ? 0 : index + 1)
-                }
+              <motion.div
+                className="w-full h-full"
+                layout
+                drag="y"
+                dragMomentum={true}
+                dragConstraints={{ top: 0, left: 0, right: 0, bottom: 0 }}
+                onDragStart={(event, info) => setStartPos(info.point.y)}
+                onDragEnd={(event, info) => {
+                  const required = 150;
+                  const newPos = info.point.y;
+
+                  if (newPos - startPos < -required) {
+                    // Swipe up
+                    setIndex((index == 0 ? images.length : index) - 1);
+                  } else if (newPos - startPos > required) {
+                    // Swipe down
+                    setIndex(index == images.length - 1 ? 0 : index + 1);
+                  }
+
+                  setStartPos(0);
+                }}
               />
             </div>
             <img src={images[index]} className="w-96 h-96 object-cover" />

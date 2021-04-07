@@ -7,6 +7,7 @@ import { fetcher } from "@app/fetcher";
 import { JWT, JWTPayload } from "@app/jwt";
 import { NewPost } from "@components/newpost";
 import { prisma } from "@app/prisma";
+import { PostElement } from "@components/post";
 
 type AppProps = {
   user: JWTPayload;
@@ -42,12 +43,7 @@ export default function App(props: AppProps) {
         <h1>Posts</h1>
         <div className="flex flex-col gap-4 h-64 overflow-y-auto">
           {props.posts.map((post) => (
-            <div className="bg-red-900" key={post.id}>
-              {post.caption!.split("\n").map((cap) => (
-                <h2>{cap}</h2>
-              ))}
-              <p>{post.id}</p>
-            </div>
+            <PostElement post={post} key={post.id} />
           ))}
         </div>
         <p>You have posted {props.posts.length} times</p>

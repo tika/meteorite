@@ -5,7 +5,7 @@ import dayjs from "dayjs";
 import { isDev } from "./constants";
 import { IncomingMessage } from "http";
 
-export type JWTPayload = Pick<User, "id" | "email" | "username">;
+export type JWTPayload = Pick<User, "id" | "username">;
 
 export class JWT {
   public static readonly SECRET_KEY = "meteorite";
@@ -18,7 +18,6 @@ export class JWT {
   public sign(): string {
     const payload: JWTPayload = {
       id: this.user.id,
-      email: this.user.email,
       username: this.user.username,
     };
 

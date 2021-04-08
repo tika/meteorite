@@ -32,6 +32,7 @@ export function PostElement(props: PostProps) {
   const [expanded, setExpanded] = useState(false);
   const [startPos, setStartPos] = useState(0);
   const [next, setNext] = useState(0);
+  const [currentPos, setCurrentPos] = useState(0);
 
   return (
     <>
@@ -61,15 +62,15 @@ export function PostElement(props: PostProps) {
               <div className="absolute top-0 z-10 left-0 w-96 h-96">
                 <motion.div
                   style={{ backgroundImage: `url(${images[index]})` }}
-                  className="object-cover  w-96 h-96 bg-no-repeat bg-cover bg-center"
+                  className="object-cover w-96 h-96 bg-no-repeat bg-cover bg-center"
                   layout
                   drag="y"
                   dragMomentum={true}
                   dragConstraints={{ top: 0, left: 0, right: 0, bottom: 0 }}
                   onDragStart={(event, info) => setStartPos(info.point.y)}
                   onDrag={(event, info) => {
-                    const required = 150;
                     const newPos = info.point.y;
+                    setCurrentPos(newPos);
 
                     if (newPos - startPos < 0) {
                       // Swipe up
@@ -91,13 +92,19 @@ export function PostElement(props: PostProps) {
                       setIndex(index == images.length - 1 ? 0 : index + 1);
                     }
 
-                    setStartPos(0);
+                    setStartPos(newPos - startPos - required);
                   }}
                 />
               </div>
               <img
                 src={images[next]}
-                style={{}}
+                style={{
+                  bottom: `${
+                    currentPos === startPos
+                      ? startPos
+                      : `calc(${currentPos}px - 24rem)`
+                  }`,
+                }}
                 className="z-0 absolute transition ease-in-out duration-1000 w-96 h-96 object-cover"
               />
             </div>

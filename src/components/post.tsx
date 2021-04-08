@@ -10,9 +10,9 @@ import { motion } from "framer-motion";
 
 interface PostProps {
   post: Post;
+  currentUser: User;
   key: string;
 }
-
 export function PostElement(props: PostProps) {
   const { data, error } = useSWR<Omit<User, "password" | "email">>(
     `/users?id=${props.post.authorId}`,
@@ -31,6 +31,7 @@ export function PostElement(props: PostProps) {
   const [index, setIndex] = useState(0);
   const [expanded, setExpanded] = useState(false);
   const [startPos, setStartPos] = useState(0);
+  const [goingUp, setGoingUp] = useState(false);
 
   return (
     <>
@@ -39,20 +40,46 @@ export function PostElement(props: PostProps) {
       ) : (
         <div key={props.key}>
           <div className="mb-4 relative">
-            <h1
-              style={{ writingMode: "vertical-rl" }}
-              className="absolute bottom-6 font-bold text-white transform rotate-180"
-            >
-              @{data.username}
-            </h1>
-            <div className="absolute top-0 left-0 w-full h-full">
+            <div className="w-full absolute bottom-6 flex flex-row justify-between">
+              <h1
+                style={{ writingMode: "vertical-rl" }}
+                className="font-bold text-white transform rotate-180 z-10"
+              >
+                @{data.username}
+              </h1>
+              <div className="mr-2 px-1 py-3 z-10 flex flex-col gap-2 bg-gray-900 opacity-90 rounded-full">
+                {Array.from(Array(images.length)).map((x, i) => (
+                  <div
+                    className={`w-2 h-2 transition ease-in-out duration-500 ${
+                      i === index ? "bg-blue-300" : "bg-gray-600"
+                    } rounded-full`}
+                  />
+                ))}
+              </div>
+            </div>
+            <div className="absolute top-0 left-0 w-96 h-96">
               <motion.div
-                className="w-full h-full"
+                style={{ backgroundImage: `url(${images[index]})` }}
+                className="object-cover z-0 w-96 h-96 bg-no-repeat bg-cover bg-center"
                 layout
                 drag="y"
                 dragMomentum={true}
                 dragConstraints={{ top: 0, left: 0, right: 0, bottom: 0 }}
                 onDragStart={(event, info) => setStartPos(info.point.y)}
+                onDrag={(event, info) => {
+                  const required = 150;
+                  const newPos = info.point.y;
+
+                  if (newPos - startPos < -required) {
+                    // Swipe up
+                    // setIndex((index == 0 ? images.length : index) - 1);
+                    setGoingUp(true);
+                  } else if (newPos - startPos > required) {
+                    // Swipe down
+                    // setIndex(index == images.length - 1 ? 0 : index + 1);
+                    setGoingUp(false);
+                  }
+                }}
                 onDragEnd={(event, info) => {
                   const required = 150;
                   const newPos = info.point.y;
@@ -69,7 +96,18 @@ export function PostElement(props: PostProps) {
                 }}
               />
             </div>
-            <img src={images[index]} className="w-96 h-96 object-cover" />
+            <img
+              src={
+                images[
+                  goingUp
+                    ? (index == 0 ? images.length : index) - 1
+                    : index == images.length - 1
+                    ? 0
+                    : index + 1
+                ]
+              }
+              className="transition ease-in-out duration-1000 w-96 h-96 object-cover"
+            />
           </div>
 
           <div className="w-96 flex flex-row items-start gap-4 self-center">

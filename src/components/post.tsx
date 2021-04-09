@@ -8,13 +8,15 @@ import { Heart } from "@components/svg/heart";
 import { Bookmark } from "@components/svg/bookmark";
 import { motion } from "framer-motion";
 
+type SafeUser = Omit<User, "password" | "email">;
+
 interface PostProps {
   post: Post;
-  currentUser: User;
+  currentUser: SafeUser;
   key: string;
 }
 export function PostElement(props: PostProps) {
-  const { data, error } = useSWR<Omit<User, "password" | "email">>(
+  const { data, error } = useSWR<SafeUser>(
     `/users?id=${props.post.authorId}`,
     (url) => fetcher("GET", url)
   );
@@ -49,16 +51,17 @@ export function PostElement(props: PostProps) {
                 @{data.username}
               </h1>
               <div className="mr-2 px-1 py-3 z-20 flex flex-col gap-2 bg-gray-900 opacity-90 rounded-full">
-                {Array.from(Array(images.length)).map((x, i) => (
+                {images.map((x, i) => (
                   <div
                     className={`w-2 h-2 transition ease-in-out duration-500 ${
                       i === index ? "bg-blue-300" : "bg-gray-600"
                     } rounded-full`}
+                    onClick={() => setIndex(i)}
                   />
                 ))}
               </div>
             </div>
-            <div className="relative w-full h-96">
+            <div className="relative w-full h-96 bg-red-500">
               <div className="absolute top-0 z-10 left-0 w-96 h-96">
                 <motion.div
                   style={{ backgroundImage: `url(${images[index]})` }}
@@ -92,7 +95,8 @@ export function PostElement(props: PostProps) {
                       setIndex(index == images.length - 1 ? 0 : index + 1);
                     }
 
-                    setStartPos(newPos - startPos - required);
+                    setStartPos(Math.abs(newPos + startPos - required));
+                    setCurrentPos(384);
                   }}
                 />
               </div>

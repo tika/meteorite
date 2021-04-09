@@ -41,9 +41,9 @@ export default function App(props: AppProps) {
       </h2>
       <div>
         <h1>Posts</h1>
-        <div className="flex flex-col gap-4 ">
+        <div className="flex flex-col gap-10">
           {props.posts.map((post) => (
-            <PostElement post={post} key={post.id} />
+            <PostElement currentUser={props.user} post={post} key={post.id} />
           ))}
         </div>
         <p>You have posted {props.posts.length} times</p>

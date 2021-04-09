@@ -11,16 +11,26 @@ datasource db {
 }
 
 model User {
-  id   String  @id @default(cuid())
-  username String  @unique @db.VarChar(255)
-  email    String  @unique @db.VarChar(255)
-  password String? @db.VarChar(255)
-  posts    Post[]
+  id         String  @id @default(cuid())
+  username   String  @unique @db.VarChar(255)
+  email      String  @unique @db.VarChar(255)
+  password   String? @db.VarChar(255)
+  posts      Post[]  @relation("postedPosts")
+  likedPosts Post[]  @relation("likedBy")
 }
 
 model Post {
-  id   String  @id @default(cuid())
-  caption  String? @db.VarChar(255)
-  author   User    @relation(fields: [authorId], references: [id])
+  id       String    @id @default(cuid())
+  caption  String?   @db.VarChar(255)
+  author   User      @relation(name: "postedPosts", fields: [authorId], references: [id])
   authorId String
+  likedBy  User[]    @relation(name: "likedBy")
+  comments Comment[] @relation
+}
+
+model Comment {
+  id      String @id @default(cuid())
+  post    Post   @relation(fields: [postId], references: [id])
+  content String
+  postId  String
 }

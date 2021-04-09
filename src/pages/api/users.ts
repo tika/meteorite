@@ -14,6 +14,7 @@ export default createEndpoint({
   GET: async (req, res) => {
     const user = await prisma.user.findFirst({
       where: { id: req.query.id as string },
+      include: { likedPosts: true },
     });
 
     if (!user) {

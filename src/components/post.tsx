@@ -11,10 +11,14 @@ import { motion } from "framer-motion";
 type SafeUser = Omit<User, "password" | "email">;
 
 interface PostProps {
-  post: Post;
+  post: Post & {
+    comments: Comment[];
+    likedBy: User[];
+  };
   currentUser: SafeUser;
   key: string;
 }
+
 export function PostElement(props: PostProps) {
   const { data, error } = useSWR<SafeUser>(
     `/users?id=${props.post.authorId}`,
@@ -123,17 +127,20 @@ export function PostElement(props: PostProps) {
             </div>
 
             <div className="flex flex-col gap-1 w-full">
-              <p
+              <div
                 onClick={() => !expanded && setExpanded(true)}
                 className={`line-clamp-${expanded ? "none" : "3"}`}
               >
                 {props.post.caption?.split("\n").map((line) => (
                   <p className="text-sm">{line}</p>
                 ))}
-              </p>
+              </div>
 
               <div className="flex">
-                <Chat className="h-6" />
+                <Chat
+                  className="h-6"
+                  onClick={() => console.log(props.post.comments)}
+                />
                 <Heart className="h-6" />
                 <Bookmark className="h-6" />
               </div>

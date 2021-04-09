@@ -1,4 +1,4 @@
-import { Post } from ".prisma/client";
+import { Post, User } from ".prisma/client";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/dist/client/router";
 import { useState } from "react";
@@ -11,7 +11,7 @@ import { PostElement } from "@components/post";
 
 type AppProps = {
   user: JWTPayload;
-  posts: Post[];
+  posts: (Post & { likedBy: User[]; comments: Comment[] })[];
 };
 
 export default function App(props: AppProps) {
@@ -75,7 +75,10 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     };
   }
 
-  const posts = await prisma.post.findMany({ where: { authorId: user.id } });
+  const posts = await prisma.post.findMany({
+    where: { authorId: user.id },
+    include: { comments: true, likedBy: true },
+  });
 
   return { props: { user, posts } };
 };

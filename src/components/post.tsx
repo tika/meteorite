@@ -30,8 +30,8 @@ export function PostElement(props: PostProps) {
 
   const [images, setImages] = useState([
     "https://images.unsplash.com/photo-1546587348-d12660c30c50?ixid=MXwxMjA3fDB8MHxzZWFyY2h8MjV8fG5hdHVyYWx8ZW58MHx8MHw%3D&ixlib=rb-1.2.1&w=1000&q=80",
-    "https://www.wbcsd.org/var/site/storage/images/media/page-assets/new-projects/nature-action/science-based-targets-for-nature/154616-1-eng-GB/Science-based-Targets-for-Nature_720_square.jpg",
-    "https://www.happybrainscience.com/wp-content/uploads/2017/07/derwent-morning-Cropped.jpg",
+    // "https://www.wbcsd.org/var/site/storage/images/media/page-assets/new-projects/nature-action/science-based-targets-for-nature/154616-1-eng-GB/Science-based-Targets-for-Nature_720_square.jpg",
+    // "https://www.happybrainscience.com/wp-content/uploads/2017/07/derwent-morning-Cropped.jpg",
   ]);
 
   const [index, setIndex] = useState(0);
@@ -54,16 +54,18 @@ export function PostElement(props: PostProps) {
               >
                 @{data.username}
               </h1>
-              <div className="mr-2 px-1 py-3 z-20 flex flex-col gap-2 bg-gray-900 opacity-90 rounded-full">
-                {images.map((x, i) => (
-                  <div
-                    className={`w-2 h-2 transition ease-in-out duration-500 ${
-                      i === index ? "bg-blue-300" : "bg-gray-600"
-                    } rounded-full`}
-                    onClick={() => setIndex(i)}
-                  />
-                ))}
-              </div>
+              {images.length > 1 && (
+                <div className="mr-2 px-1 py-3 z-20 flex flex-col gap-2 bg-gray-900 opacity-90 rounded-full">
+                  {images.map((x, i) => (
+                    <div
+                      className={`w-2 h-2 transition ease-in-out duration-500 ${
+                        i === index ? "bg-blue-300" : "bg-gray-600"
+                      } rounded-full`}
+                      onClick={() => setIndex(i)}
+                    />
+                  ))}
+                </div>
+              )}
             </div>
             <div className="relative w-full h-96 bg-red-500">
               <div className="absolute top-0 z-10 left-0 w-96 h-96">

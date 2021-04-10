@@ -11,26 +11,47 @@ datasource db {
 }
 
 model User {
-  id         String  @id @default(cuid())
-  username   String  @unique @db.VarChar(255)
-  email      String  @unique @db.VarChar(255)
-  password   String? @db.VarChar(255)
-  posts      Post[]  @relation("postedPosts")
-  likedPosts Post[]  @relation("likedBy")
+  id       String  @id @default(cuid())
+  username String  @unique @db.VarChar(255)
+  email    String  @unique @db.VarChar(255)
+  password String? @db.VarChar(255)
+
+  // Followers
+  followers  User[] @relation("UserFriendsUser", references: [id])
+  followerOf User[] @relation("UserFriendsUser", references: [id])
+
+  // Posts
+  posts      Post[] @relation("UserAuthorsPost")
+  likedPosts Post[] @relation("UserLikesPost")
+
+  // Comments
+  comments      Comment[] @relation("UserAuthorsComment")
+  likedComments Comment[] @relation("UserLikesComment")
 }
 
 model Post {
-  id       String    @id @default(cuid())
-  caption  String?   @db.VarChar(255)
-  author   User      @relation(name: "postedPosts", fields: [authorId], references: [id])
+  id        String   @id @default(cuid())
+  caption   String?  @db.VarChar(2000)
+  createdAt DateTime @default(now())
+
+  author   User   @relation("UserAuthorsPost", fields: [authorId], references: [id])
   authorId String
-  likedBy  User[]    @relation(name: "likedBy")
-  comments Comment[] @relation
+
+  likedBy User[] @relation("UserLikesPost", references: [id])
+
+  comments Comment[] @relation("PostHasComment")
 }
 
 model Comment {
-  id      String @id @default(cuid())
-  post    Post   @relation(fields: [postId], references: [id])
-  content String
-  postId  String
+  id        String   @id @default(cuid())
+  content   String   @db.VarChar(256)
+  createdAt DateTime @default(now())
+
+  post   Post   @relation("PostHasComment", fields: [postId], references: [id])
+  postId String
+
+  author   User   @relation("UserAuthorsComment", fields: [authorId], references: [id])
+  authorId  String
+
+  likedBy User[] @relation("UserLikesComment", references: [id])
 }

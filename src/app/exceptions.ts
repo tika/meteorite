@@ -6,7 +6,7 @@ export class DisplayedError extends Error {
 
 export class NotFound extends DisplayedError {
   constructor(resource: string) {
-    super(404, `The resource ${resource} was not found`);
+    super(404, `Unknown ${resource}`);
   }
 }
 

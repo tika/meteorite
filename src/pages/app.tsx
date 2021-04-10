@@ -80,5 +80,8 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     include: { comments: true, likedBy: true },
   });
 
-  return { props: { user, posts } };
+  const diffPosts: any[] = posts;
+  diffPosts.map((p) => (p.createdAt = p.createdAt.toISOString()));
+
+  return { props: { user, posts: diffPosts } };
 };

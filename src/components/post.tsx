@@ -30,8 +30,8 @@ export function PostElement(props: PostProps) {
 
   const [images, setImages] = useState([
     "https://images.unsplash.com/photo-1546587348-d12660c30c50?ixid=MXwxMjA3fDB8MHxzZWFyY2h8MjV8fG5hdHVyYWx8ZW58MHx8MHw%3D&ixlib=rb-1.2.1&w=1000&q=80",
-    // "https://www.wbcsd.org/var/site/storage/images/media/page-assets/new-projects/nature-action/science-based-targets-for-nature/154616-1-eng-GB/Science-based-Targets-for-Nature_720_square.jpg",
-    // "https://www.happybrainscience.com/wp-content/uploads/2017/07/derwent-morning-Cropped.jpg",
+    "https://www.wbcsd.org/var/site/storage/images/media/page-assets/new-projects/nature-action/science-based-targets-for-nature/154616-1-eng-GB/Science-based-Targets-for-Nature_720_square.jpg",
+    "https://www.happybrainscience.com/wp-content/uploads/2017/07/derwent-morning-Cropped.jpg",
   ]);
 
   const [index, setIndex] = useState(0);
@@ -67,7 +67,7 @@ export function PostElement(props: PostProps) {
                 </div>
               )}
             </div>
-            <div className="relative w-full h-96 bg-red-500">
+            <div className="relative w-full h-96 bg-gray-100 shadow-sm">
               <div className="absolute top-0 z-10 left-0 w-96 h-96">
                 <motion.div
                   style={{ backgroundImage: `url(${images[index]})` }}
@@ -106,17 +106,6 @@ export function PostElement(props: PostProps) {
                   }}
                 />
               </div>
-              <img
-                src={images[next]}
-                style={{
-                  bottom: `${
-                    currentPos === startPos
-                      ? startPos
-                      : `calc(${currentPos}px - 24rem)`
-                  }`,
-                }}
-                className="z-0 absolute transition ease-in-out duration-1000 w-96 h-96 object-cover"
-              />
             </div>
           </div>
 

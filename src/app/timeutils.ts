@@ -27,6 +27,10 @@ function padZero(input: number) {
   return input.toString().length === 1 ? `0${input}` : input;
 }
 
+function padPlural(input: number) {
+  return input == 1 ? "" : "s";
+}
+
 function isThisWeek(compare: Date, now: Date) {
   const inAWeek = new Date(now);
   inAWeek.setDate(inAWeek.getDate() + 7);
@@ -39,7 +43,7 @@ function isToday(compare: Date, now: Date) {
 }
 
 export function autoDatify(dateObj: Date) {
-  // if posted within 24h, state how many minutes | hours have passed since this date
+  // if posted within 24h, state how many minutes | hours have passed since this date ✅
   // if posted within a week, state how many days have passed since this date
   // else say how many weeks since that date
   // if weeks > 52, then say what year it was created -> eg. June 2019
@@ -53,6 +57,12 @@ export function autoDatify(dateObj: Date) {
     return nowSeconds - dateSeconds < 60 * 60
       ? now.getMinutes() - dateObj.getMinutes() + "m ago"
       : now.getHours() - dateObj.getHours() + "h ago";
+  } else if (isThisWeek(dateObj, now)) {
+    const numberOfDays = Math.ceil(
+      (now.getTime() - dateObj.getTime()) / 8.64e7
+    );
+
+    return `${numberOfDays} day${padPlural(numberOfDays)} ago`;
   }
 }
 

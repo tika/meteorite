@@ -83,10 +83,10 @@ export function PostElement(props: PostProps) {
 
                     if (newPos - startPos < 0) {
                       // Swipe up
-                      setNext((index == 0 ? images.length : index) - 1);
+                      setNext(index == images.length - 1 ? 0 : index + 1);
                     } else if (newPos - startPos > 0) {
                       // Swipe down
-                      setNext(index == images.length - 1 ? 0 : index + 1);
+                      setNext((index == 0 ? images.length : index) - 1);
                     }
                   }}
                   onDragEnd={(event, info) => {
@@ -95,10 +95,10 @@ export function PostElement(props: PostProps) {
 
                     if (newPos - startPos < -required) {
                       // Swipe up
-                      setIndex((index == 0 ? images.length : index) - 1);
+                      setIndex(index == images.length - 1 ? 0 : index + 1);
                     } else if (newPos - startPos > required) {
                       // Swipe down
-                      setIndex(index == images.length - 1 ? 0 : index + 1);
+                      setIndex((index == 0 ? images.length : index) - 1);
                     }
 
                     setStartPos(Math.abs(newPos + startPos - required));

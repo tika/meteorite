@@ -73,7 +73,7 @@ export function PostElement(props: PostProps) {
                   style={{ backgroundImage: `url(${images[index]})` }}
                   className="object-cover w-96 h-96 bg-no-repeat bg-cover bg-center"
                   layout
-                  drag="y"
+                  drag={images.length > 1 ? "y" : false}
                   dragMomentum={true}
                   dragConstraints={{ top: 0, left: 0, right: 0, bottom: 0 }}
                   onDragStart={(event, info) => setStartPos(info.point.y)}

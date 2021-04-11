@@ -63,6 +63,14 @@ export function autoDatify(dateObj: Date) {
     );
 
     return `${numberOfDays} day${padPlural(numberOfDays)} ago`;
+  } else {
+    const weeksPassed = Math.round(
+      Math.ceil((now.getTime() - dateObj.getTime()) / 8.64e7) / 7
+    );
+
+    return weeksPassed > 52
+      ? `${months[dateObj.getMonth()]} ${dateObj.getFullYear()}`
+      : `${weeksPassed} week${padPlural(weeksPassed)} ago`;
   }
 }
 

@@ -41,6 +41,10 @@ export function PostElement(props: PostProps) {
   const [next, setNext] = useState(0);
   const [currentPos, setCurrentPos] = useState(0);
 
+  const [isLiked, setIsLiked] = useState(
+    props.post.likedBy.filter((u) => u.id === props.currentUser.id).length > 0
+  );
+
   return (
     <>
       {!data ? (
@@ -139,11 +143,14 @@ export function PostElement(props: PostProps) {
                 />
                 <Heart
                   className="h-6"
-                  isLiked={
-                    props.post.likedBy.filter(
-                      (u) => u.id === props.currentUser.id
-                    ).length > 0
-                  }
+                  isLiked={isLiked}
+                  onClick={() => {
+                    fetcher(
+                      isLiked ? "DELETE" : "PUT",
+                      `/posts/${props.post.id}/likes`
+                    );
+                    setIsLiked(!isLiked);
+                  }}
                 />
                 <Bookmark className="h-6" />
               </div>

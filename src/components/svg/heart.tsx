@@ -1,13 +1,17 @@
 import React from "react";
 import { IconProps } from "../icons";
 
-export function Heart({ onClick, className }: IconProps) {
+export function Heart({
+  onClick,
+  className,
+  isLiked,
+}: IconProps & { isLiked: boolean }) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      fill="none"
+      fill={isLiked ? "#EF4444" : "none"}
       viewBox="0 0 24 24"
-      stroke="currentColor"
+      stroke={isLiked ? "#EF4444" : "currentColor"}
       className={className}
       onClick={onClick}
     >

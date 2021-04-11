@@ -71,8 +71,6 @@ export default createEndpoint({
       throw new DisplayedError(400, "You cannot update a post you do not own");
     }
 
-    // const fullUser = await prisma.user.findFirst({ where: { id: user.id } });
-
     await prisma.post.update({
       where: { id: postId },
       data: {

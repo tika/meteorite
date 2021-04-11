@@ -135,7 +135,14 @@ export function PostElement(props: PostProps) {
                   className="h-6"
                   onClick={() => console.log(props.post.comments)}
                 />
-                <Heart className="h-6" />
+                <Heart
+                  className="h-6"
+                  isLiked={
+                    props.post.likedBy.filter(
+                      (u) => u.id === props.currentUser.id
+                    ).length > 0
+                  }
+                />
                 <Bookmark className="h-6" />
               </div>
             </div>

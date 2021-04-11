@@ -7,6 +7,7 @@ import { Chat } from "@components/svg/chat";
 import { Heart } from "@components/svg/heart";
 import { Bookmark } from "@components/svg/bookmark";
 import { motion } from "framer-motion";
+import { autoDatify, properDatify } from "@app/timeutils";
 
 type SafeUser = Omit<User, "password" | "email">;
 
@@ -126,6 +127,8 @@ export function PostElement(props: PostProps) {
                   <p className="text-sm">{line}</p>
                 ))}
               </div>
+
+              <h1>{autoDatify(new Date(props.post.createdAt))}</h1>
 
               <div className="flex">
                 <Chat

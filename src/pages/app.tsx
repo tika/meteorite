@@ -19,19 +19,18 @@ export default function App(props: AppProps) {
   const router = useRouter();
 
   return (
-    <div
-      className={`min-h-screen mx-auto flex flex-col justify-center transition duration-200 items-center`}
-    >
+    <div className="min-h-screen mx-auto flex flex-col justify-center transition duration-200 items-center">
       {isPosting && (
-        <>
-          <div className="absolute flex justify-center align-center z-30">
-            <NewPost setIsPosting={setIsPosting} />
-          </div>
+        <div className="fixed z-20 left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2">
+          <NewPost
+            className="fixed z-50 left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2"
+            setIsPosting={setIsPosting}
+          />
           <div
-            className="absolute w-screen h-screen z-10"
+            className="h-screen w-screen z-10"
             onClick={() => setIsPosting(false)}
           />
-        </>
+        </div>
       )}
       <h1 className="font-black text-6xl dark:text-white mb-4">
         Hey, {props.user.username}

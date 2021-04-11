@@ -6,11 +6,16 @@ import { FormInput } from "./forminput";
 
 interface NewPostProps {
   setIsPosting(val: boolean): void;
+  className?: string;
+  style?: any;
 }
 
-export function NewPost({ setIsPosting }: NewPostProps) {
+export function NewPost({ setIsPosting, className, style }: NewPostProps) {
   return (
-    <div className="bg-white w-80 h-full shadow-md p-4 rounded-md">
+    <div
+      style={style}
+      className={"bg-white w-80 shadow-md p-4 rounded-md z-50 " + className}
+    >
       <h2 className="font-medium text-2xl">Create new post</h2>
       <Form
         submit={(body) =>

@@ -2,12 +2,12 @@ import { Post, User } from ".prisma/client";
 import React, { useState } from "react";
 import useSWR from "swr";
 import { fetcher } from "@app/fetcher";
-import ClipLoader from "react-spinners/ClipLoader";
+import HashLoader from "react-spinners/HashLoader";
 import { Chat } from "@components/svg/chat";
 import { Heart } from "@components/svg/heart";
 import { Bookmark } from "@components/svg/bookmark";
 import { motion } from "framer-motion";
-import { autoDatify, properDatify } from "@app/timeutils";
+import { autoDatify } from "@app/timeutils";
 
 type SafeUser = Omit<User, "password" | "email">;
 
@@ -44,7 +44,9 @@ export function PostElement(props: PostProps) {
   return (
     <>
       {!data ? (
-        <ClipLoader loading={!data} size={150} />
+        <div className="flex flex-row justify-center items-center">
+          <HashLoader color="#3B82F6" loading={!data} size={100} />
+        </div>
       ) : (
         <div key={props.key}>
           <div className="mb-4 relative">

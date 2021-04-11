@@ -3,6 +3,7 @@ import { fetcher } from "@app/fetcher";
 import { createPostSchema } from "@schemas/posts";
 import { Form } from "./form";
 import { FormInput } from "./forminput";
+import { Cross } from "./svg/cross";
 
 interface NewPostProps {
   setIsPosting(val: boolean): void;
@@ -16,7 +17,14 @@ export function NewPost({ setIsPosting, className, style }: NewPostProps) {
       style={style}
       className={"bg-white w-80 shadow-md p-4 rounded-md z-50 " + className}
     >
-      <h2 className="font-medium text-2xl">Create new post</h2>
+      <div className="flex flex-row items-center justify-between">
+        <h2 className="font-medium text-2xl">Create new post</h2>
+        <Cross
+          className="h-6 w-6 cursor-pointer"
+          onClick={() => setIsPosting(false)}
+        />
+      </div>
+
       <Form
         submit={(body) =>
           fetcher("PUT", "/posts", {

@@ -1,7 +1,7 @@
 import { Post, User } from ".prisma/client";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/dist/client/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { fetcher } from "@app/fetcher";
 import { JWT, JWTPayload } from "@app/jwt";
@@ -19,7 +19,7 @@ export default function App(props: AppProps) {
   const router = useRouter();
 
   return (
-    <div className="min-h-screen mx-auto flex flex-col justify-center transition duration-200 items-center">
+    <div className="h-full mx-auto flex flex-col justify-center transition duration-200 items-center">
       {isPosting && (
         <div className="fixed z-20 left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2">
           <NewPost
@@ -27,7 +27,7 @@ export default function App(props: AppProps) {
             setIsPosting={setIsPosting}
           />
           <div
-            className="h-screen w-screen z-10"
+            className="h-screen w-screen z-10 "
             onClick={() => setIsPosting(false)}
           />
         </div>

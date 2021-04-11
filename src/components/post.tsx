@@ -52,7 +52,7 @@ export function PostElement(props: PostProps) {
           <HashLoader color="#3B82F6" loading={!data} size={100} />
         </div>
       ) : (
-        <div key={props.key}>
+        <div className="w-96" key={props.key}>
           <div className="mb-4 relative">
             <div className="w-full absolute bottom-6 flex flex-row justify-between">
               <h1
@@ -124,35 +124,41 @@ export function PostElement(props: PostProps) {
               />
             </div>
 
-            <div className="flex flex-col gap-1 w-full">
+            <div
+              className="flex flex-col gap-1 w-full"
+              style={{ width: "18rem" }}
+            >
               <div
                 onClick={() => !expanded && setExpanded(true)}
                 className={`line-clamp-${expanded ? "none" : "3"}`}
               >
                 {props.post.caption?.split("\n").map((line) => (
-                  <p className="text-sm">{line}</p>
+                  <p className="text-sm break-words">{line}</p>
                 ))}
               </div>
 
-              <h1>{autoDatify(new Date(props.post.createdAt))}</h1>
-
-              <div className="flex">
-                <Chat
-                  className="h-6"
-                  onClick={() => console.log(props.post.comments)}
-                />
-                <Heart
-                  className="h-6"
-                  isLiked={isLiked}
-                  onClick={() => {
-                    fetcher(
-                      isLiked ? "DELETE" : "PUT",
-                      `/posts/${props.post.id}/likes`
-                    );
-                    setIsLiked(!isLiked);
-                  }}
-                />
-                <Bookmark className="h-6" />
+              <div>
+                <p className="font-semibold text-sm">
+                  {autoDatify(new Date(props.post.createdAt))}
+                </p>
+                <div className="flex">
+                  <Chat
+                    className="h-6"
+                    onClick={() => console.log(props.post.comments)}
+                  />
+                  <Heart
+                    className="h-6"
+                    isLiked={isLiked}
+                    onClick={() => {
+                      fetcher(
+                        isLiked ? "DELETE" : "PUT",
+                        `/posts/${props.post.id}/likes`
+                      );
+                      setIsLiked(!isLiked);
+                    }}
+                  />
+                  <Bookmark className="h-6" />
+                </div>
               </div>
             </div>
           </div>

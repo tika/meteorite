@@ -1,7 +1,6 @@
-import { Post, User } from ".prisma/client";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/dist/client/router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import toast from "react-hot-toast";
 import { fetcher } from "@app/fetcher";
 import { JWT, JWTPayload } from "@app/jwt";

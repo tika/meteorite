@@ -24,6 +24,7 @@ interface FormProps<
       props: FormFieldProps
     ) => JSX.Element;
   };
+  inline?: boolean;
 }
 
 export function Form<T extends ZodObject<any, any>, H extends keyof Infer<T>>(
@@ -67,7 +68,9 @@ export function Form<T extends ZodObject<any, any>, H extends keyof Infer<T>>(
             .finally(() => setLoading(false));
         }
       }}
-      className="flex flex-col items-center"
+      className={`flex ${
+        props.inline ? "flex-row items-center justify-center gap-3" : "flex-col"
+      } items-center`}
     >
       {Object.entries(props.schema.shape).map((entry, index) => {
         const [key] = entry;

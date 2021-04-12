@@ -9,7 +9,7 @@ import { Bookmark } from "@components/svg/bookmark";
 import { motion } from "framer-motion";
 import { autoDatify } from "@app/timeutils";
 
-type SafeUser = Omit<User, "password" | "email">;
+export type SafeUser = Omit<User, "password" | "email">;
 
 export type extendedPost = Post & { likedBy: User[]; comments: Comment[] };
 

@@ -7,22 +7,24 @@ import { fetcher } from "@app/fetcher";
 import { JWT, JWTPayload } from "@app/jwt";
 import { NewPost } from "@components/newpost";
 import { prisma } from "@app/prisma";
-import { PostElement } from "@components/post";
+import { extendedPost, PostElement } from "@components/post";
 import { RemoveScrollBar } from "react-remove-scroll-bar";
+import { Comments } from "@components/comments";
 
 type AppProps = {
   user: JWTPayload;
-  posts: (Post & { likedBy: User[]; comments: Comment[] })[];
+  posts: extendedPost[];
 };
 
 export default function App(props: AppProps) {
   const [isPosting, setIsPosting] = useState(false);
+  const [commentingOnPost, setCommentingOnPost] = useState<extendedPost>();
   const router = useRouter();
 
   return (
     <div className="h-full mx-auto flex flex-col justify-center items-center">
       {isPosting && (
-        <div className="fixed z-30 left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 transition ease-in-out duration-150">
+        <div className="fixed z-30 left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2">
           <NewPost
             className="fixed z-50 left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2"
             setIsPosting={setIsPosting}
@@ -31,6 +33,20 @@ export default function App(props: AppProps) {
             style={{ backdropFilter: "blur(1px) grayscale(0.1)" }}
             className="h-screen w-screen z-40"
             onClick={() => setIsPosting(false)}
+          />
+          <RemoveScrollBar />
+        </div>
+      )}
+      {commentingOnPost && (
+        <div className="fixed z-30 left-1/2 bottom-0 transform -translate-x-1/2 transition">
+          <Comments
+            className="fixed z-50 left-1/2 bottom-0 transform -translate-x-1/2"
+            post={commentingOnPost}
+          />
+          <div
+            style={{ backdropFilter: "blur(1px) grayscale(0.1)" }}
+            className="h-screen w-screen z-40"
+            onClick={() => setCommentingOnPost(undefined)}
           />
           <RemoveScrollBar />
         </div>
@@ -45,7 +61,12 @@ export default function App(props: AppProps) {
         <h1>Posts</h1>
         <div className="flex flex-col gap-10">
           {props.posts.map((post) => (
-            <PostElement currentUser={props.user} post={post} key={post.id} />
+            <PostElement
+              setCommentingOnPost={(p: extendedPost) => setCommentingOnPost(p)}
+              currentUser={props.user}
+              post={post}
+              key={post.id}
+            />
           ))}
         </div>
         <p>You have posted {props.posts.length} times</p>

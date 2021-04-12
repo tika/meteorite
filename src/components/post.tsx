@@ -1,4 +1,4 @@
-import { Post, User } from ".prisma/client";
+import { Comment, Post, User } from ".prisma/client";
 import React, { useState } from "react";
 import useSWR from "swr";
 import { fetcher } from "@app/fetcher";
@@ -11,13 +11,13 @@ import { autoDatify } from "@app/timeutils";
 
 type SafeUser = Omit<User, "password" | "email">;
 
+export type extendedPost = Post & { likedBy: User[]; comments: Comment[] };
+
 interface PostProps {
-  post: Post & {
-    comments: Comment[];
-    likedBy: User[];
-  };
+  post: extendedPost;
   currentUser: SafeUser;
   key: string;
+  setCommentingOnPost(post: extendedPost): void;
 }
 
 export function PostElement(props: PostProps) {
@@ -144,7 +144,7 @@ export function PostElement(props: PostProps) {
                 <div className="flex">
                   <Chat
                     className="h-6"
-                    onClick={() => console.log(props.post.comments)}
+                    onClick={() => props.setCommentingOnPost(props.post)}
                   />
                   <Heart
                     className="h-6"

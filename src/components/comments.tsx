@@ -1,15 +1,20 @@
 import React from "react";
-import { Comment } from ".prisma/client";
 import { CommentElement } from "./commentelement";
+import { extendedPost } from "./post";
 
 interface CommentsProps {
-  comments: Comment[];
+  post: extendedPost;
+  className?: string;
+  style?: any;
 }
 
 export function Comments(props: CommentsProps) {
   return (
-    <div>
-      {props.comments.map((comment) => (
+    <div
+      className={`${props.className} w-64 h-64 bg-red-500`}
+      style={props.style}
+    >
+      {props.post.comments.map((comment) => (
         <CommentElement comment={comment} />
       ))}
     </div>

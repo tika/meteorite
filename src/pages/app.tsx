@@ -19,15 +19,16 @@ export default function App(props: AppProps) {
   const router = useRouter();
 
   return (
-    <div className="h-full mx-auto flex flex-col justify-center transition duration-200 items-center">
+    <div className="h-full mx-auto flex flex-col justify-center items-center">
       {isPosting && (
-        <div className="fixed z-20 left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2">
+        <div className="fixed z-30 left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 transition ease-in-out duration-150">
           <NewPost
             className="fixed z-50 left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2"
             setIsPosting={setIsPosting}
           />
           <div
-            className="h-screen w-screen z-10 "
+            style={{ backdropFilter: "blur(1px) grayscale(0.1)" }}
+            className="h-screen w-screen z-40"
             onClick={() => setIsPosting(false)}
           />
         </div>

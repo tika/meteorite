@@ -11,7 +11,7 @@ interface CommentsProps {
 export function Comments(props: CommentsProps) {
   return (
     <div
-      className={`${props.className} w-96 h-64 bg-red-500 rounded-tr-lg`}
+      className={`${props.className} w-96 h-80 bg-gray-100 rounded-t-lg`}
       style={props.style}
     >
       {props.post.comments.map((comment) => (

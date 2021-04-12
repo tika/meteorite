@@ -22,7 +22,7 @@ export default function App(props: AppProps) {
   const router = useRouter();
 
   return (
-    <div className="h-full mx-auto flex flex-col justify-center items-center">
+    <div className="h-full w-screen flex flex-col justify-center items-center">
       {isPosting && (
         <div className="fixed z-30 left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2">
           <NewPost

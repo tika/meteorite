@@ -8,6 +8,7 @@ import { JWT, JWTPayload } from "@app/jwt";
 import { NewPost } from "@components/newpost";
 import { prisma } from "@app/prisma";
 import { PostElement } from "@components/post";
+import { RemoveScrollBar } from "react-remove-scroll-bar";
 
 type AppProps = {
   user: JWTPayload;
@@ -31,6 +32,7 @@ export default function App(props: AppProps) {
             className="h-screen w-screen z-40"
             onClick={() => setIsPosting(false)}
           />
+          <RemoveScrollBar />
         </div>
       )}
       <h1 className="font-black text-6xl dark:text-white mb-4">

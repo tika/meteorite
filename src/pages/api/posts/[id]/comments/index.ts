@@ -2,6 +2,11 @@ import { createEndpoint } from "@app/endpoint";
 import { DisplayedError, NotFound } from "@app/exceptions";
 import { JWT } from "@app/jwt";
 import { prisma } from "@app/prisma";
+import { createCommentSchema } from "@schemas/posts";
+
+// GET => [ comment, comment1 ]
+// [Auth] PUT, { content: string } => comment
+// [Auth] DELETE => { success: true }
 
 export default createEndpoint({
   GET: async (req, res) => {
@@ -9,19 +14,16 @@ export default createEndpoint({
 
     const post = await prisma.post.findFirst({
       where: { id },
-      include: { likedBy: true },
+      include: { comments: true },
     });
 
     if (!post) {
       throw new NotFound("post");
     }
 
-    const safeUsers = post.likedBy.map((user) => {
-      const { email, password, ...rest } = user;
-      return rest;
-    });
+    const comments = post.comments;
 
-    res.json({ likedBy: safeUsers });
+    res.json({ comments: comments });
   },
   DELETE: async (req, res) => {
     const user = JWT.parseRequest(req);
@@ -42,7 +44,7 @@ export default createEndpoint({
     await prisma.post.update({
       where: { id: postId },
       data: {
-        likedBy: {
+        comments: {
           disconnect: {
             id: user.id,
           },
@@ -60,6 +62,7 @@ export default createEndpoint({
     }
 
     const postId = req.query.id as string;
+    const { content } = createCommentSchema.parse(req.body);
 
     const post = await prisma.post.findFirst({
       where: { id: postId },
@@ -69,17 +72,14 @@ export default createEndpoint({
       throw new NotFound("post");
     }
 
-    await prisma.post.update({
-      where: { id: postId },
+    const comment = await prisma.comment.create({
       data: {
-        likedBy: {
-          connect: {
-            id: user.id,
-          },
-        },
+        authorId: user.id,
+        postId: postId,
+        content: content,
       },
     });
 
-    res.json({ success: true });
+    res.json({ comment: comment });
   },
 });

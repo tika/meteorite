@@ -15,6 +15,28 @@ type AppProps = {
   posts: extendedPost[];
 };
 
+/*
+  I needed a commit for today, so here's how it goes;
+  I have no clue what to do with this project, as I hate CSS
+  Now, while I hate CSS, I don't hate progress, however,
+  I can't get any progress done without CSS
+  My hate for CSS has expanded out of just "oo it doesn't work"
+  Instead it's now "oo it doesn't work and what the hell am i doing 
+  with my life, I should be writing GOOD code, not spending all day
+  changing the color of something that hasn't even been implemented"
+
+  The design for this project has not been made, neither in my head
+  nor in Figma and thus I have left it upon myself to use CSS to somehow
+  style and design this project for me, so I don't know anymore - what
+  am i supposed to do? Sit here all day trying to make the div center or
+  do I watch Breaking Bad for 12 hours straight? I think I'll go with the
+  second option. So I apologise future me for not having a very useful commit
+  for today, but here it is - I changed absolutely nothing to this code,
+  but luckily I'm brainstorming some ideas that I could implement if
+  I had a plan for this project and not rely on CSS... 
+  (No one should ever rely on CSS)
+*/
+
 export default function App(props: AppProps) {
   const [isPosting, setIsPosting] = useState(false);
   const [commentingOnPost, setCommentingOnPost] = useState<extendedPost>();

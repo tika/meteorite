@@ -7,9 +7,7 @@ export default function App({ Component, pageProps, router }: AppProps) {
   const { message = null } = router.query as { message?: string };
 
   useEffect(() => {
-    if (message) {
-      toast(message);
-    }
+    if (message) toast(message);
   }, []);
 
   return (

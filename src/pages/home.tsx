@@ -25,7 +25,7 @@ export default function Home(props: HomeProps) {
         width: "calc(100vw - 17px)",
       }}
     >
-      <Left />
+      <Left user={props.user} />
       <Feed
         posts={props.posts}
         user={props.user}

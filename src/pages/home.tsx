@@ -27,20 +27,6 @@ export default function Home(props: HomeProps) {
         width: "calc(100vw - 17px)",
       }}
     >
-      {commentingOnPost && (
-        <div className="fixed z-30 left-1/2 bottom-0 transform -translate-x-1/2 transition">
-          <Comments
-            className="fixed z-50 left-1/2 bottom-0 transform -translate-x-1/2"
-            post={commentingOnPost}
-          />
-          <div
-            style={{ backdropFilter: "blur(1px) grayscale(0.1)" }}
-            className="h-screen w-screen z-40"
-            onClick={() => setCommentingOnPost(undefined)}
-          />
-          <RemoveScrollBar />
-        </div>
-      )}
       <div className="flex flex-col gap-10">
         {props.posts.map((post) => (
           <PostElement

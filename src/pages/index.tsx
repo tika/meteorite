@@ -26,7 +26,7 @@ export default function Home(props: HomeProps) {
       <button
         type="button"
         className="inline-flex text-white items-center px-6 py-3 border border-transparent text-base font-medium rounded-full shadow-s bg-theme-dark hover:bg-theme-light focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-        onClick={() => router.push(props.user ? "/app" : "/login")}
+        onClick={() => router.push(props.user ? "/home" : "/login")}
       >
         {props.user ? "Open App" : "Login"}
       </button>

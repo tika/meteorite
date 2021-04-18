@@ -74,11 +74,11 @@ export function PostElement(props: PostProps) {
                 </div>
               )}
             </div>
-            <div className="relative w-full h-96 bg-gray-100 shadow-sm">
+            <div className="relative w-full h-96 bg-gray-100 shadow-sm rounded-lg">
               <div className="absolute top-0 z-10 left-0 w-96 h-96">
                 <motion.div
                   style={{ backgroundImage: `url(${images[index]})` }}
-                  className="object-cover w-96 h-96 bg-no-repeat bg-cover bg-center"
+                  className="object-cover rounded-lg w-96 h-96 bg-no-repeat bg-cover bg-center"
                   layout
                   drag={images.length > 1 ? "y" : false}
                   dragMomentum={true}

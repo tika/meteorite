@@ -9,52 +9,51 @@ import { Left } from "@components/pages/left";
 import { Right } from "@components/pages/right";
 
 type HomeProps = {
-  user: JWTPayload;
-  posts: extendedPost[];
+    user: JWTPayload;
+    posts: extendedPost[];
 };
 
 export default function Home(props: HomeProps) {
-  const [isPosting, setIsPosting] = useState(false);
-  const [commentingOnPost, setCommentingOnPost] = useState<extendedPost>();
-  const router = useRouter();
+    const [isPosting, setIsPosting] = useState(false);
+    const [commentingOnPost, setCommentingOnPost] = useState<extendedPost>();
+    const router = useRouter();
 
-  return (
-    <div
-      className="h-full flex flex-row justify-evenly"
-      style={{
-        width: "calc(100vw - 17px)",
-      }}
-    >
-      <Left user={props.user} />
-      <Feed
-        posts={props.posts}
-        user={props.user}
-        setCommentingOnPost={(p) => setCommentingOnPost(p)}
-      />
-      <Right />
-    </div>
-  );
+    return (
+        <div
+            className="h-full grid grid-cols-12"
+            style={{
+                width: "calc(100vw - 17px)",
+            }}>
+            <Left user={props.user} />
+            <Feed
+                posts={props.posts}
+                user={props.user}
+                setCommentingOnPost={(p) => setCommentingOnPost(p)}
+            />
+            <Right />
+        </div>
+    );
 }
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const user = JWT.parseRequest(ctx.req);
+    const user = JWT.parseRequest(ctx.req);
 
-  if (!user) {
-    return {
-      redirect: {
-        destination: "/login",
-        permanent: false,
-      },
-    };
-  }
+    if (!user) {
+        return {
+            redirect: {
+                destination: "/login",
+                permanent: false,
+            },
+        };
+    }
 
-  const posts = await prisma.post.findMany({
-    where: { authorId: user.id },
-    include: { comments: true, likedBy: true },
-  });
+    const posts = await prisma.post.findMany({
+        where: { authorId: user.id },
+        include: { comments: true, likedBy: true },
+    });
 
-  let diffPosts: any[] = posts;
-  diffPosts.map((p) => (p.createdAt = p.createdAt.toISOString()));
+    let diffPosts: any[] = posts;
+    diffPosts.map((p) => (p.createdAt = p.createdAt.toISOString()));
 
-  return { props: { user, posts: JSON.parse(JSON.stringify(diffPosts)) } };
+    return { props: { user, posts: JSON.parse(JSON.stringify(diffPosts)) } };
 };

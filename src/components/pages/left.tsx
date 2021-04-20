@@ -2,6 +2,10 @@ import { SafeUser } from "@components/post";
 import { Dots } from "@components/svg/dots";
 import { Home } from "@components/svg/home";
 import React from "react";
+import { Bell } from "../svg/bell";
+import { Mail } from "../svg/mail";
+import { Profile } from "../svg/profile";
+import { Bookmark } from "../svg/bookmark";
 
 interface LeftProps {
   user: SafeUser;
@@ -28,9 +32,26 @@ export function Left(props: LeftProps) {
             onClick={() => console.log("profile settings")}
           />
         </div>
-        <div>
-          <div>
-            <Home />
+        <div className="flex flex-col gap-3 mt-16 ml-4">
+          <div className="flex flex-row gap-2 items-center">
+            <Home className="w-8" />
+            <h1 className="font-semibold text-lg">Home</h1>
+          </div>
+          <div className="flex flex-row gap-2 items-center">
+            <Bell className="w-8" />
+            <h1 className="font-semibold text-lg">Notifications</h1>
+          </div>
+          <div className="flex flex-row gap-2 items-center">
+            <Mail className="w-8" />
+            <h1 className="font-semibold text-lg">Messages</h1>
+          </div>
+          <div className="flex flex-row gap-2 items-center">
+            <Profile className="w-8" />
+            <h1 className="font-semibold text-lg">Profile</h1>
+          </div>
+          <div className="flex flex-row gap-2 items-center">
+            <Bookmark className="w-8" />
+            <h1 className="font-semibold text-lg">Saved</h1>
           </div>
         </div>
       </div>

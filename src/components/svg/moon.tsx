@@ -9,8 +9,7 @@ export function Moon({ onClick, className }: IconProps) {
       viewBox="0 0 24 24"
       stroke="currentColor"
       className={className}
-      onClick={onClick}
-    >
+      onClick={onClick}>
       <path
         strokeLinecap="round"
         strokeLinejoin="round"

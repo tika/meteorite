@@ -11,7 +11,7 @@ export function Left(props: LeftProps) {
         "https://images.pexels.com/photos/1704488/pexels-photo-1704488.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500";
 
     return (
-        <div className="flex justify-center w-full py-8 z-50 col-span-3">
+        <div className="sm:flex justify-center w-full py-8 z-50 hidden sm:col-span-3">
             <div className="fixed flex flex-col">
                 <div className="flex flex-row gap-3 items-center">
                     <img

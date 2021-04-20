@@ -57,8 +57,7 @@ export function PostElement(props: PostProps) {
             <div className="w-full absolute bottom-6 flex flex-row justify-between">
               <h1
                 style={{ writingMode: "vertical-rl" }}
-                className="font-bold text-white transform rotate-180 z-20"
-              >
+                className="font-bold text-white transform rotate-180 z-20">
                 @{data.username}
               </h1>
               {images.length > 1 && (
@@ -126,12 +125,10 @@ export function PostElement(props: PostProps) {
 
             <div
               className="flex flex-col gap-1 w-full"
-              style={{ width: "18rem" }}
-            >
+              style={{ width: "18rem" }}>
               <div
                 onClick={() => !expanded && setExpanded(true)}
-                className={`line-clamp-${expanded ? "none" : "3"}`}
-              >
+                className={`line-clamp-${expanded ? "none" : "3"}`}>
                 {props.post.caption?.split("\n").map((line) => (
                   <p className="text-sm break-words">{line}</p>
                 ))}
@@ -142,10 +139,6 @@ export function PostElement(props: PostProps) {
                   {autoDatify(new Date(props.post.createdAt))}
                 </p>
                 <div className="flex">
-                  <Chat
-                    className="h-6"
-                    onClick={() => props.setCommentingOnPost(props.post)}
-                  />
                   <Heart
                     className="h-6"
                     isLiked={isLiked}
@@ -156,6 +149,10 @@ export function PostElement(props: PostProps) {
                       );
                       setIsLiked(!isLiked);
                     }}
+                  />
+                  <Chat
+                    className="h-6"
+                    onClick={() => props.setCommentingOnPost(props.post)}
                   />
                   <Bookmark className="h-6" />
                 </div>

@@ -9,7 +9,7 @@ interface Props {
 
 export function Feed(props: Props) {
     return (
-        <div className="flex items-center flex-col py-8 gap-10 col-span-6">
+        <div className="flex items-center flex-col py-8 gap-10 col-span-12 sm:col-span-6">
             {props.posts.map((post) => (
                 <PostElement
                     setCommentingOnPost={(p: extendedPost) =>

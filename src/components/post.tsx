@@ -8,6 +8,7 @@ import { Heart } from "@components/svg/heart";
 import { Bookmark } from "@components/svg/bookmark";
 import { motion } from "framer-motion";
 import { autoDatify } from "@app/timeutils";
+import { Bullet } from "@components/svg/bullet";
 
 export type SafeUser = Omit<User, "password" | "email">;
 
@@ -74,6 +75,7 @@ export function PostElement(props: PostProps) {
               )}
             </div>
             <div className="relative w-full h-96 bg-gray-100 shadow-sm rounded-lg">
+              <Bookmark className="absolute top-5 right-5 z-20 w-6" />
               <div className="absolute top-0 z-10 left-0 w-96 h-96">
                 <motion.div
                   style={{ backgroundImage: `url(${images[index]})` }}
@@ -135,10 +137,7 @@ export function PostElement(props: PostProps) {
               </div>
 
               <div>
-                <p className="font-semibold text-sm">
-                  {autoDatify(new Date(props.post.createdAt))}
-                </p>
-                <div className="flex">
+                <div className="flex items-center">
                   <Heart
                     className="h-6"
                     isLiked={isLiked}
@@ -154,7 +153,10 @@ export function PostElement(props: PostProps) {
                     className="h-6"
                     onClick={() => props.setCommentingOnPost(props.post)}
                   />
-                  <Bookmark className="h-6" />
+                  <Bullet className="ml-1 mr-2" />
+                  <p className="font-semibold text-sm">
+                    {autoDatify(new Date(props.post.createdAt))}
+                  </p>
                 </div>
               </div>
             </div>

@@ -34,23 +34,23 @@ export function Left(props: LeftProps) {
         </div>
         <div className="flex flex-col gap-3 mt-16 ml-4">
           <div className="flex flex-row gap-2 items-center">
-            <Home className="w-8" />
+            <Home className="w-6" />
             <h1 className="font-semibold text-lg">Home</h1>
           </div>
           <div className="flex flex-row gap-2 items-center">
-            <Bell className="w-8" />
+            <Bell className="w-6" />
             <h1 className="font-semibold text-lg">Notifications</h1>
           </div>
           <div className="flex flex-row gap-2 items-center">
-            <Mail className="w-8" />
+            <Mail className="w-6" />
             <h1 className="font-semibold text-lg">Messages</h1>
           </div>
           <div className="flex flex-row gap-2 items-center">
-            <Profile className="w-8" />
+            <Profile className="w-6" />
             <h1 className="font-semibold text-lg">Profile</h1>
           </div>
           <div className="flex flex-row gap-2 items-center">
-            <Bookmark className="w-8" />
+            <Bookmark className="w-6" />
             <h1 className="font-semibold text-lg">Saved</h1>
           </div>
         </div>

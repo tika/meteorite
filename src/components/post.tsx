@@ -9,6 +9,8 @@ import { Bookmark } from "@components/svg/bookmark";
 import { motion } from "framer-motion";
 import { autoDatify } from "@app/timeutils";
 import { Bullet } from "@components/svg/bullet";
+import FastAverageColor from "fast-average-color";
+import { useEffect } from "react";
 
 export type SafeUser = Omit<User, "password" | "email">;
 
@@ -41,6 +43,12 @@ export function PostElement(props: PostProps) {
   const [startPos, setStartPos] = useState(0);
   const [next, setNext] = useState(0);
   const [currentPos, setCurrentPos] = useState(0);
+  const [averageColor, setAverageColor] = useState<IFastAverageColorResult>();
+
+  useEffect(() => {
+    const fac = new FastAverageColor();
+    fac.getColorAsync(images[index]).then((color) => setAverageColor(color));
+  }, [images, index]);
 
   const [isLiked, setIsLiked] = useState(
     props.post.likedBy.filter((u) => u.id === props.currentUser.id).length > 0
@@ -75,7 +83,11 @@ export function PostElement(props: PostProps) {
               )}
             </div>
             <div className="relative w-full h-96 bg-gray-100 shadow-sm rounded-lg">
-              <Bookmark className="absolute top-5 right-5 z-20 w-6" />
+              <Bookmark
+                className={`absolute top-5 right-5 z-20 w-6 ${
+                  averageColor?.isDark ? "text-white" : "text-black"
+                }`}
+              />
               <div className="absolute top-0 z-10 left-0 w-96 h-96">
                 <motion.div
                   style={{ backgroundImage: `url(${images[index]})` }}

@@ -1,5 +1,5 @@
 import { Comment, Post, User } from ".prisma/client";
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import useSWR from "swr";
 import { fetcher } from "@app/fetcher";
 import HashLoader from "react-spinners/HashLoader";
@@ -36,6 +36,7 @@ export function PostElement(props: PostProps) {
     "https://images.unsplash.com/photo-1546587348-d12660c30c50?ixid=MXwxMjA3fDB8MHxzZWFyY2h8MjV8fG5hdHVyYWx8ZW58MHx8MHw%3D&ixlib=rb-1.2.1&w=1000&q=80",
     "https://www.wbcsd.org/var/site/storage/images/media/page-assets/new-projects/nature-action/science-based-targets-for-nature/154616-1-eng-GB/Science-based-Targets-for-Nature_720_square.jpg",
     "https://www.happybrainscience.com/wp-content/uploads/2017/07/derwent-morning-Cropped.jpg",
+    "https://miro.medium.com/max/6494/0*mi1X66cRuXRVLfKT",
   ]);
 
   const [index, setIndex] = useState(0);
@@ -44,10 +45,13 @@ export function PostElement(props: PostProps) {
   const [next, setNext] = useState(0);
   const [currentPos, setCurrentPos] = useState(0);
   const [averageColor, setAverageColor] = useState<IFastAverageColorResult>();
+  const imgRef = useRef<any>();
 
   useEffect(() => {
     const fac = new FastAverageColor();
-    fac.getColorAsync(images[index]).then((color) => setAverageColor(color));
+    if (imgRef) {
+      fac.getColorAsync(imgRef.current).then((color) => setAverageColor(color));
+    }
   }, [images, index]);
 
   const [isLiked, setIsLiked] = useState(
@@ -62,6 +66,9 @@ export function PostElement(props: PostProps) {
         </div>
       ) : (
         <div className="w-96" key={props.key}>
+          {/* Purely used for average color */}
+          <img src={images[index]} ref={imgRef} className="hidden" />
+
           <div className="mb-4 relative">
             <div className="w-full absolute bottom-6 flex flex-row justify-between">
               <h1
@@ -85,7 +92,7 @@ export function PostElement(props: PostProps) {
             <div className="relative w-full h-96 bg-gray-100 shadow-sm rounded-lg">
               <Bookmark
                 className={`absolute top-5 right-5 z-20 w-6 ${
-                  averageColor?.isDark ? "text-white" : "text-black"
+                  averageColor?.isDark ? "text-white" : "text-dark"
                 }`}
               />
               <div className="absolute top-0 z-10 left-0 w-96 h-96">
@@ -128,7 +135,6 @@ export function PostElement(props: PostProps) {
               </div>
             </div>
           </div>
-
           <div className="w-96 flex flex-row items-start gap-4 self-center">
             <div className="max-w-full max-h-sm">
               <img

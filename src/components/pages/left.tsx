@@ -9,6 +9,7 @@ import { Bookmark } from "../svg/bookmark";
 
 interface LeftProps {
   user: SafeUser;
+  onPost(): void;
 }
 
 export function Left(props: LeftProps) {
@@ -16,7 +17,7 @@ export function Left(props: LeftProps) {
     "https://images.pexels.com/photos/1704488/pexels-photo-1704488.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500";
 
   return (
-    <div className="sm:flex h-screen relative justify-center w-full z-50 hidden sm:col-span-3">
+    <div className="sm:flex h-screen relative justify-center w-full z-40 hidden sm:col-span-3">
       <div className="fixed flex flex-col h-full items-center justify-between py-8">
         <div>
           <div className="flex flex-row gap-3 items-center">
@@ -58,6 +59,7 @@ export function Left(props: LeftProps) {
         </div>
         <button
           type="button"
+          onClick={() => props.onPost()}
           className="justify-center w-4/6 text-white items-center px-6 py-3 border border-transparent text-base font-medium rounded-full shadow-s bg-gray-900 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
           Post
         </button>

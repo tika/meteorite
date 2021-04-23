@@ -247,6 +247,11 @@
   resolved "https://registry.npmjs.org/@hapi/hoek/-/hoek-9.1.1.tgz"
   integrity sha512-CAEbWH7OIur6jEOzaai83jq3FmKmv4PmX1JYfs9IrYcGEVI/lyL1EXJGCj7eFVJ0bg5QR8LMxBlEtA+xKiLpFw==
 
+"@headlessui/react@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@headlessui/react/-/react-1.0.0.tgz#661b50ebfd25041abb45d8eedd85e7559056bcaf"
+  integrity sha512-mjqRJrgkbcHQBfAHnqH0yRxO/y/22jYrdltpE7WkurafREKZ+pj5bPBwYHMt935Sdz/n16yRcVmsSCqDFHee9A==
+
 "@mapbox/node-pre-gyp@^1.0.0":
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/@mapbox/node-pre-gyp/-/node-pre-gyp-1.0.2.tgz#c5f9261ba86afcc7085a8250ee9fa222b0238be9"

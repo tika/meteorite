@@ -49,7 +49,7 @@ export function PostElement(props: PostProps) {
 
   useEffect(() => {
     const fac = new FastAverageColor();
-    if (imgRef) {
+    if (imgRef.current) {
       fac.getColorAsync(imgRef.current).then((color) => setAverageColor(color));
     }
   }, [images, index]);

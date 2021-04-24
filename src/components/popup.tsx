@@ -3,6 +3,7 @@ import { RemoveScrollBar } from "react-remove-scroll-bar";
 import { useEffect } from "react";
 import { Dialog } from "@headlessui/react";
 import { Cross } from "./svg/cross";
+import toast from "react-hot-toast";
 
 export type PopupState = "posting" | undefined;
 
@@ -32,6 +33,13 @@ export function Popup(props: PopupProps) {
 function Posting({ close }: { close(): void }) {
   const textarea = useRef<any | undefined>();
   const [content, setContent] = useState("");
+  const [imgs, setImgs] = useState([
+    profilePicture,
+    profilePicture,
+    "https://www.gettyimages.com/gi-resources/images/500px/983794168.jpg",
+    "https://helpx.adobe.com/content/dam/help/en/photoshop/using/convert-color-image-black-white/jcr_content/main-pars/before_and_after/image-before/Landscape-Color.jpg",
+    profilePicture,
+  ]);
 
   useEffect(() => {
     if (textarea && textarea.current) {
@@ -42,19 +50,44 @@ function Posting({ close }: { close(): void }) {
     }
   }, [content]);
 
+  useEffect(() => {
+    if (imgs.length > 2) {
+      toast.error("Only 2 images allowed");
+      // setImgs(imgs.splice(1));
+    }
+  }, [imgs]);
+
   return (
     <Dialog
       open={true}
-      onClose={() => console.log("ok")}
+      onClose={() => close()}
+      initialFocus={textarea}
       className="fixed z-50 left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white px-6 py-4 rounded-lg">
       <Dialog.Overlay />
 
-      <div className="flex flex-row justify-between">
+      <div className="flex flex-row justify-between mb-2">
         <Dialog.Title className="font-bold text-xl">New Post</Dialog.Title>
         <Cross className="w-6 cursor-pointer" onClick={() => close()} />
       </div>
 
-      <div className="flex mb-8 mt-4 gap-4">
+      {imgs && (
+        <>
+          <p className="text-gray-700 font-medium">Images:</p>
+
+          <div
+            className="flex flex-row gap-2 overflow-y-hidden"
+            style={{ width: "calc(3rem + 1rem + 20rem + 4rem)" }}>
+            {imgs.map((src) => (
+              <img
+                src={src}
+                className="mt-2 h-40 rounded-md object-cover self-center"
+              />
+            ))}
+          </div>
+        </>
+      )}
+
+      <div className={`flex mb-8 ${imgs ? "mt-6" : "mt-2"} gap-4`}>
         <img
           src={profilePicture}
           className="w-16 h-16 max-w-none object-cover rounded-md"

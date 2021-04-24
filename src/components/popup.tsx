@@ -54,7 +54,7 @@ function Posting({ close }: { close(): void }) {
         <Cross className="w-6 cursor-pointer" onClick={() => close()} />
       </div>
 
-      <div className="flex my-10 gap-4">
+      <div className="flex mb-8 mt-4 gap-4">
         <img
           src={profilePicture}
           className="w-16 h-16 max-w-none object-cover rounded-md"

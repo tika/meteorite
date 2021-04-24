@@ -34,7 +34,7 @@ function Posting({ close }: { close(): void }) {
   const [content, setContent] = useState("");
 
   useEffect(() => {
-    if (textarea) {
+    if (textarea && textarea.current) {
       textarea.current.style.height = "0px";
       const scrollHeight = textarea.current.scrollHeight;
       textarea.current.style.height =
@@ -60,10 +60,11 @@ function Posting({ close }: { close(): void }) {
           className="w-16 h-16 max-w-none object-cover rounded-md"
         />
         <textarea
-          className="w-80"
+          className="w-80 outline-none resize-none"
           onChange={(e) => setContent(e.target.value)}
           value={content}
           ref={textarea}
+          placeholder="Whats going on?"
         />
       </div>
 

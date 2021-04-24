@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { Dialog } from "@headlessui/react";
 import { Cross } from "./svg/cross";
 import toast from "react-hot-toast";
+import { GridAdd } from "./svg/gridadd";
 
 export type PopupState = "posting" | undefined;
 
@@ -72,7 +73,13 @@ function Posting({ close }: { close(): void }) {
 
       {imgs && (
         <>
-          <p className="text-gray-700 font-medium">Images:</p>
+          <div className="flex justify-between">
+            <p className="text-gray-700 font-medium">Images:</p>
+            <button className="flex gap-1 text-blue-600 focus:outline-none">
+              <GridAdd className="w-6" />
+              <h1>Attach Image</h1>
+            </button>
+          </div>
 
           <div
             className="flex flex-row gap-2 overflow-y-hidden"

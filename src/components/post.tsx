@@ -11,6 +11,7 @@ import { autoDatify } from "@app/timeutils";
 import { Bullet } from "@components/svg/bullet";
 import FastAverageColor from "fast-average-color";
 import { useEffect } from "react";
+import { Share } from "./svg/share";
 
 export type SafeUser = Omit<User, "password" | "email">;
 
@@ -59,15 +60,58 @@ export function PostElement(props: PostProps) {
         </div>
       ) : (
         <div className="w-96" key={props.key}>
-          // Images post or text post
           {props.post.images && props.post.images.length > 0 ? (
-            // Images post
             <ImagePost props={passProps} />
           ) : (
-            <div />
+            <TextPost props={passProps} />
           )}
         </div>
       )}
+    </>
+  );
+}
+
+function TextPost({ props }: { props: PassedProps }) {
+  return (
+    <>
+      <div className="flex items-center gap-2">
+        <div className="max-w-full max-h-sm">
+          <img
+            src={props.profilePicture}
+            className="w-16 h-16 max-w-none object-cover rounded-md"
+          />
+        </div>
+        <div>
+          <h1 className="font-bold">@{props.user.username}</h1>
+          <h2 className="text-gray-600 font-medium">
+            {autoDatify(new Date(props.post.createdAt))}
+          </h2>
+        </div>
+      </div>
+      <div className="mt-2">
+        {props.post.caption?.split("\n").map((line) => (
+          <p className="text-md break-words">{line}</p>
+        ))}
+      </div>
+      <div className="flex justify-between w-full">
+        <Heart
+          className="h-6"
+          isLiked={props.isLiked}
+          onClick={() => {
+            fetcher(
+              props.isLiked ? "DELETE" : "PUT",
+              `/posts/${props.post.id}/likes`
+            );
+            props.setIsLiked(!props.isLiked);
+          }}
+        />
+        <Chat
+          className="h-6"
+          onClick={() => props.setCommentingOnPost(props.post)}
+        />
+        <Bookmark className="h-6" />
+        <Share className="h-6" />
+      </div>
     </>
   );
 }

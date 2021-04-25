@@ -19,14 +19,7 @@ export default function Home(props: HomeProps) {
   const [popup, setPopup] = useState<PopupState>();
 
   return (
-    <div
-      className="h-full grid grid-cols-12"
-      style={{
-        width:
-          typeof window !== "undefined" && window.scrollbars.visible
-            ? "calc(100vw - 17px)"
-            : "100vw",
-      }}>
+    <div className="h-full grid grid-cols-12 max-w-full">
       {popup && (
         <Popup closeThis={() => setPopup(undefined)} currentPopup={popup} />
       )}

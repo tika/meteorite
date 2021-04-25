@@ -5,6 +5,8 @@ import { Dialog } from "@headlessui/react";
 import { Cross } from "./svg/cross";
 import toast from "react-hot-toast";
 import { GridAdd } from "./svg/gridadd";
+import { createPostSchema } from "../schemas/posts";
+import { fetcher } from "@app/fetcher";
 
 export type PopupState = "posting" | undefined;
 
@@ -35,12 +37,27 @@ function Posting({ close }: { close(): void }) {
   const textarea = useRef<any | undefined>();
   const [content, setContent] = useState("");
   const [imgs, setImgs] = useState([
-    profilePicture,
-    profilePicture,
-    "https://www.gettyimages.com/gi-resources/images/500px/983794168.jpg",
-    "https://helpx.adobe.com/content/dam/help/en/photoshop/using/convert-color-image-black-white/jcr_content/main-pars/before_and_after/image-before/Landscape-Color.jpg",
-    profilePicture,
+    // profilePicture,
+    // profilePicture,
+    // "https://www.gettyimages.com/gi-resources/images/500px/983794168.jpg",
+    // "https://helpx.adobe.com/content/dam/help/en/photoshop/using/convert-color-image-black-white/jcr_content/main-pars/before_and_after/image-before/Landscape-Color.jpg",
+    // profilePicture,
   ]);
+
+  async function createPost() {
+    if (imgs.length < 1) {
+      if (!createPostSchema.safeParse({ caption: content }).success)
+        return toast.error("Caption must have over 3 characters");
+      await toast
+        .promise(fetcher("PUT", "/posts", { caption: content }), {
+          success: "Success",
+          loading: "Loading",
+          error: (e) => e.message || "Something went wrong...",
+        })
+        .catch(() => null)
+        .finally(() => close());
+    }
+  }
 
   useEffect(() => {
     if (textarea && textarea.current) {
@@ -71,7 +88,7 @@ function Posting({ close }: { close(): void }) {
         <Cross className="w-6 cursor-pointer" onClick={() => close()} />
       </div>
 
-      {imgs && (
+      {imgs.length > 0 && (
         <>
           <div className="flex justify-between">
             <p className="text-gray-700 font-medium">Images:</p>
@@ -111,6 +128,7 @@ function Posting({ close }: { close(): void }) {
       <div className="flex justify-center">
         <button
           type="button"
+          onClick={() => createPost()}
           className="justify-center w-40 text-white items-center px-6 py-3 border border-transparent text-sm font-medium rounded-full shadow-s bg-gray-900 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
           Create post
         </button>

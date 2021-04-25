@@ -15,16 +15,17 @@ type HomeProps = {
 };
 
 export default function Home(props: HomeProps) {
-  const [isPosting, setIsPosting] = useState(false);
   const [commentingOnPost, setCommentingOnPost] = useState<extendedPost>();
   const [popup, setPopup] = useState<PopupState>();
-  const router = useRouter();
 
   return (
     <div
       className="h-full grid grid-cols-12"
       style={{
-        width: "calc(100vw - 17px)",
+        width:
+          typeof window !== "undefined" && window.scrollbars.visible
+            ? "calc(100vw - 17px)"
+            : "100vw",
       }}>
       {popup && (
         <Popup closeThis={() => setPopup(undefined)} currentPopup={popup} />

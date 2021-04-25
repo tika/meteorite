@@ -11,10 +11,10 @@ datasource db {
 }
 
 model User {
-  id       String  @id @default(cuid())
-  username String  @unique @db.VarChar(255)
-  email    String  @unique @db.VarChar(255)
-  password String? @db.VarChar(255)
+  id       String @id @default(cuid())
+  username String @unique @db.VarChar(255)
+  email    String @unique @db.VarChar(255)
+  password String @db.VarChar(255)
 
   // Followers
   followers  User[] @relation("UserFriendsUser", references: [id])
@@ -34,6 +34,8 @@ model Post {
   caption   String?  @db.VarChar(2000)
   createdAt DateTime @default(now())
 
+  images String[]
+
   author   User   @relation("UserAuthorsPost", fields: [authorId], references: [id])
   authorId String
 
@@ -51,7 +53,7 @@ model Comment {
   postId String
 
   author   User   @relation("UserAuthorsComment", fields: [authorId], references: [id])
-  authorId  String
+  authorId String
 
   likedBy User[] @relation("UserLikesComment", references: [id])
 }

@@ -10,10 +10,10 @@ import { Popup, PopupState } from "@components/popup";
 
 type HomeProps = {
   user: JWTPayload;
-  posts: extendedPost[];
+  post: extendedPost;
 };
 
-export default function Home(props: HomeProps) {
+export default function PostPage(props: HomeProps) {
   const [commentingOnPost, setCommentingOnPost] = useState<extendedPost>();
   const [popup, setPopup] = useState<PopupState>();
 
@@ -23,11 +23,7 @@ export default function Home(props: HomeProps) {
         <Popup closeThis={() => setPopup(undefined)} currentPopup={popup} />
       )}
       <Left user={props.user} onPost={() => setPopup("posting")} />
-      <Feed
-        posts={props.posts}
-        user={props.user}
-        setCommentingOnPost={(p) => setCommentingOnPost(p)}
-      />
+      {props.post.id}
       <Right />
     </div>
   );
@@ -36,22 +32,16 @@ export default function Home(props: HomeProps) {
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const user = JWT.parseRequest(ctx.req);
 
-  if (!user) {
-    return {
-      redirect: {
-        destination: "/login",
-        permanent: false,
-      },
-    };
-  }
-
-  const posts = await prisma.post.findMany({
-    where: { authorId: user.id },
+  let post = await prisma.post.findFirst({
+    where: { id: ctx.query.post as string },
     include: { comments: true, likedBy: true },
   });
 
-  let diffPosts: any[] = posts;
-  diffPosts.map((p) => (p.createdAt = p.createdAt.toISOString()));
+  if (!post) {
+    return {
+      notFound: true,
+    };
+  }
 
-  return { props: { user, posts: JSON.parse(JSON.stringify(diffPosts)) } };
+  return { props: { user, post: JSON.parse(JSON.stringify(post)) } };
 };

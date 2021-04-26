@@ -34,11 +34,15 @@ function Posting({ close }: { close(): void }) {
   const textarea = useRef<any | undefined>();
   const [content, setContent] = useState("");
   const [imgs, setImgs] = useState<File[]>([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   async function createPost() {
+    setIsSubmitting(true);
     if (imgs.length < 1) {
-      if (!createPostSchema.safeParse({ caption: content }).success)
+      if (!createPostSchema.safeParse({ caption: content }).success) {
+        setIsSubmitting(false);
         return toast.error("Caption must have over 3 characters");
+      }
       await toast
         .promise(fetcher("PUT", "/posts", { caption: content }), {
           success: "Success",
@@ -83,6 +87,7 @@ function Posting({ close }: { close(): void }) {
         .catch(() => null)
         .finally(() => close());
     }
+    setIsSubmitting(false);
   }
 
   useEffect(() => {
@@ -165,6 +170,7 @@ function Posting({ close }: { close(): void }) {
       <div className="flex justify-center">
         <button
           type="button"
+          disabled={isSubmitting}
           onClick={() => createPost()}
           className="justify-center w-40 text-white items-center px-6 py-3 border border-transparent text-sm font-medium rounded-full shadow-s bg-gray-900 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
           Create post

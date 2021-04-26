@@ -83,7 +83,7 @@ function TextPost({ props }: { props: PassedProps }) {
         </div>
         <div>
           <h1 className="font-bold">@{props.user.username}</h1>
-          <h2 className="text-gray-600 font-medium">
+          <h2 className="text-gray-600 font-medium text-sm">
             {autoDatify(new Date(props.post.createdAt))}
           </h2>
         </div>
@@ -224,7 +224,7 @@ function ImagePost({ props }: { props: PassedProps }) {
                 onClick={() => props.setCommentingOnPost(props.post)}
               />
               <Bullet className="ml-1 mr-2" />
-              <p className="font-semibold text-sm">
+              <p className="font-semibold text-sm text-gray-600">
                 {autoDatify(new Date(props.post.createdAt))}
               </p>
             </div>

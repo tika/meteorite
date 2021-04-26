@@ -24,10 +24,7 @@ export function Popup(props: PopupProps) {
       {props.currentPopup == "posting" && (
         <Posting close={() => props.closeThis()} />
       )}
-      <div
-        className="h-screen w-full z-40 bg-black opacity-70"
-        onClick={() => props.closeThis()}
-      />
+      <div className="h-screen w-full z-20 bg-black opacity-70" />
       <RemoveScrollBar />
     </div>
   );
@@ -36,13 +33,7 @@ export function Popup(props: PopupProps) {
 function Posting({ close }: { close(): void }) {
   const textarea = useRef<any | undefined>();
   const [content, setContent] = useState("");
-  const [imgs, setImgs] = useState([
-    // profilePicture,
-    // profilePicture,
-    // "https://www.gettyimages.com/gi-resources/images/500px/983794168.jpg",
-    // "https://helpx.adobe.com/content/dam/help/en/photoshop/using/convert-color-image-black-white/jcr_content/main-pars/before_and_after/image-before/Landscape-Color.jpg",
-    // profilePicture,
-  ]);
+  const [imgs, setImgs] = useState<File[]>([]);
 
   async function createPost() {
     if (imgs.length < 1) {
@@ -50,6 +41,41 @@ function Posting({ close }: { close(): void }) {
         return toast.error("Caption must have over 3 characters");
       await toast
         .promise(fetcher("PUT", "/posts", { caption: content }), {
+          success: "Success",
+          loading: "Loading",
+          error: (e) => e.message || "Something went wrong...",
+        })
+        .catch(() => null)
+        .finally(() => close());
+    } else {
+      const urls: string[] = [];
+      for (let i = 0; i < imgs.length; i++) {
+        const formData = new FormData();
+        formData.append("file", imgs[i]);
+        await fetch("/api/posts/imgs", {
+          body: formData,
+          method: "POST",
+        })
+          .then((res) => res.json())
+          .then((newImg) => urls.push(newImg.Location));
+      }
+
+      type BodyData = {
+        images: string[];
+        caption?: string;
+      };
+
+      let data: BodyData = { images: urls };
+
+      if (content.length > 0) {
+        if (!createPostSchema.safeParse({ caption: content }).success)
+          return toast.error("Caption must have over 3 characters");
+
+        data = { ...data, caption: content };
+      }
+
+      return await toast
+        .promise(fetcher("PUT", "/posts", data), {
           success: "Success",
           loading: "Loading",
           error: (e) => e.message || "Something went wrong...",
@@ -71,7 +97,7 @@ function Posting({ close }: { close(): void }) {
   useEffect(() => {
     if (imgs.length > 2) {
       toast.error("Only 2 images allowed");
-      // setImgs(imgs.splice(1));
+      setImgs(imgs.splice(1));
     }
   }, [imgs]);
 
@@ -88,6 +114,17 @@ function Posting({ close }: { close(): void }) {
         <Cross className="w-6 cursor-pointer" onClick={() => close()} />
       </div>
 
+      <input
+        type="file"
+        name="ok"
+        onChange={(e) =>
+          e.target.files &&
+          e.target.files[0] &&
+          setImgs([e.target.files[0], ...imgs])
+        }
+        accept=".png,.jpg,.jpeg"
+      />
+
       {imgs.length > 0 && (
         <>
           <div className="flex justify-between">
@@ -101,9 +138,9 @@ function Posting({ close }: { close(): void }) {
           <div
             className="flex flex-row gap-2 overflow-y-hidden"
             style={{ width: "calc(3rem + 1rem + 20rem + 4rem)" }}>
-            {imgs.map((src) => (
+            {imgs.map((img) => (
               <img
-                src={src}
+                src={URL.createObjectURL(img)}
                 className="mt-2 h-40 rounded-md object-cover self-center"
               />
             ))}

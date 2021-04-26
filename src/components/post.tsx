@@ -131,15 +131,6 @@ function ImagePost({ props }: { props: PassedProps }) {
 
   return (
     <>
-      {/* Purely used for average color */}
-      <img
-        crossOrigin="anonymous"
-        src={props.post.images[index]}
-        ref={imgRef}
-        onLoad={onImageLoad}
-        className="hidden"
-      />
-
       <div className="mb-4 relative">
         <div className="w-full absolute bottom-6 flex flex-row justify-between">
           <h1
@@ -167,10 +158,13 @@ function ImagePost({ props }: { props: PassedProps }) {
             }`}
           />
           <div className="absolute top-0 z-10 left-0 w-96 h-96">
-            <motion.div
-              style={{ backgroundImage: `url(${props.post.images[index]})` }}
-              className="object-cover rounded-lg w-96 h-96 bg-no-repeat bg-cover bg-center"
+            <motion.img
+              ref={imgRef}
+              onLoad={onImageLoad}
+              crossOrigin="anonymous"
+              className="rounded-lg w-96 h-96 object-cover object-center"
               layout
+              src={props.post.images[index]}
               drag={props.post.images.length > 1 ? "y" : false}
               dragMomentum={true}
               dragConstraints={{ top: 0, left: 0, right: 0, bottom: 0 }}

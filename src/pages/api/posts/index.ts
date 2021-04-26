@@ -7,13 +7,14 @@ import { createPostSchema } from "@schemas/posts";
 export default createEndpoint({
   PUT: async (req, res) => {
     const user = JWT.parseRequest(req);
-    const { caption } = createPostSchema.parse(req.body);
+    const { caption, images } = createPostSchema.parse(req.body);
 
     if (!user) throw new NotFound("user");
 
     const newPost = await prisma.post.create({
       data: {
         caption,
+        images,
         author: {
           connect: { id: user.id },
         },

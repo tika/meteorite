@@ -4,7 +4,8 @@ const caption = z.string().min(3);
 const content = z.string().min(3);
 
 export const createPostSchema = z.object({
-  caption,
+  caption: caption.optional(),
+  images: z.any().optional()
 });
 
 export const editPostSchema = z.object({

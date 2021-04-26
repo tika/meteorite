@@ -32,8 +32,8 @@ function padPlural(input: number) {
 }
 
 function isThisWeek(compare: Date, now: Date) {
-  const inAWeek = new Date(now);
-  inAWeek.setDate(inAWeek.getDate() + 7);
+  const inAWeek = new Date();
+  inAWeek.setDate(now.getDate() + 7);
 
   return compare.getTime() < inAWeek.getTime();
 }
@@ -49,13 +49,13 @@ export function autoDatify(dateObj: Date) {
   // if weeks > 52, then say what year it was created -> eg. June 2019
 
   const now = new Date();
-
+  
   if (isToday(dateObj, now)) {
     const nowSeconds = Math.round(now.getTime() / 1000);
     const dateSeconds = Math.round(dateObj.getTime() / 1000);
 
     return nowSeconds - dateSeconds < 60 * 60
-      ? now.getMinutes() - dateObj.getMinutes() + "m ago"
+      ? Math.round((nowSeconds - dateSeconds) / 60) + "m ago"
       : now.getHours() - dateObj.getHours() + "h ago";
   } else if (isThisWeek(dateObj, now)) {
     const numberOfDays = Math.ceil(

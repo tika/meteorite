@@ -12,6 +12,7 @@ import { Bullet } from "@components/svg/bullet";
 import FastAverageColor from "fast-average-color";
 import { useEffect } from "react";
 import { Share } from "./svg/share";
+import { useRouter } from "next/dist/client/router";
 
 export type SafeUser = Omit<User, "password" | "email">;
 
@@ -71,9 +72,13 @@ export function PostElement(props: PostProps) {
   );
 }
 
-function TextPost({ props }: { props: PassedProps }) {
+export function TextPost({ props }: { props: PassedProps }) {
+  const router = useRouter();
+
   return (
-    <div className="flex gap-2">
+    <div
+      className="flex gap-2"
+      onClick={() => router.push(`/post/${props.post.id}`)}>
       <div className="max-w-full max-h-sm">
         <img
           src={props.profilePicture}
@@ -124,7 +129,7 @@ function TextPost({ props }: { props: PassedProps }) {
   );
 }
 
-function ImagePost({ props }: { props: PassedProps }) {
+export function ImagePost({ props }: { props: PassedProps }) {
   const [startPos, setStartPos] = useState(0);
   const [averageColor, setAverageColor] = useState<IFastAverageColorResult>();
   const [index, setIndex] = useState(0);

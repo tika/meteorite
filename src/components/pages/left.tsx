@@ -6,6 +6,7 @@ import { Bell } from "../svg/bell";
 import { Mail } from "../svg/mail";
 import { Profile } from "../svg/profile";
 import { Bookmark } from "../svg/bookmark";
+import { useRouter } from "next/dist/client/router";
 
 interface LeftProps {
   user: SafeUser;
@@ -13,6 +14,8 @@ interface LeftProps {
 }
 
 export function Left(props: LeftProps) {
+  const router = useRouter();
+
   const profilePicture =
     "https://images.pexels.com/photos/1704488/pexels-photo-1704488.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500";
 
@@ -34,24 +37,26 @@ export function Left(props: LeftProps) {
               onClick={() => console.log("profile settings")}
             />
           </div>
-          <div className="flex flex-col gap-3 mt-16 ml-4">
-            <div className="flex flex-row gap-2 items-center">
+          <div className="flex flex-col w-5/6 mt-16">
+            <div
+              onClick={() => router.push("/home")}
+              className="flex flex-row gap-2 items-center hover:bg-black hover:bg-opacity-10 transition duration-200 rounded-full px-3 py-2 cursor-pointer">
               <Home className="w-6" />
               <h1 className="font-semibold text-lg">Home</h1>
             </div>
-            <div className="flex flex-row gap-2 items-center">
+            <div className="flex flex-row gap-2 items-center hover:bg-black hover:bg-opacity-10 transition duration-200 rounded-full px-3 py-2 cursor-pointer">
               <Bell className="w-6" />
               <h1 className="font-semibold text-lg">Notifications</h1>
             </div>
-            <div className="flex flex-row gap-2 items-center">
+            <div className="flex flex-row gap-2 items-center hover:bg-black hover:bg-opacity-10 transition duration-200 rounded-full px-3 py-2 cursor-pointer">
               <Mail className="w-6" />
               <h1 className="font-semibold text-lg">Messages</h1>
             </div>
-            <div className="flex flex-row gap-2 items-center">
+            <div className="flex flex-row gap-2 items-center hover:bg-black hover:bg-opacity-10 transition duration-200 rounded-full px-3 py-2 cursor-pointer">
               <Profile className="w-6" />
               <h1 className="font-semibold text-lg">Profile</h1>
             </div>
-            <div className="flex flex-row gap-2 items-center">
+            <div className="flex flex-row gap-2 items-center hover:bg-black hover:bg-opacity-10 transition duration-200 rounded-full px-3 py-2 cursor-pointer">
               <Bookmark className="w-6" />
               <h1 className="font-semibold text-lg">Saved</h1>
             </div>

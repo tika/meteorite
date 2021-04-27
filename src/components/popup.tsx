@@ -1,5 +1,4 @@
 import React, { useRef, useState } from "react";
-import { RemoveScrollBar } from "react-remove-scroll-bar";
 import { useEffect } from "react";
 import { Dialog } from "@headlessui/react";
 import { Cross } from "./svg/cross";
@@ -7,7 +6,6 @@ import toast from "react-hot-toast";
 import { GridAdd } from "./svg/gridadd";
 import { createPostSchema } from "../schemas/posts";
 import { fetcher } from "@app/fetcher";
-import { Add } from "./svg/add";
 
 export type PopupState = "posting" | undefined;
 
@@ -26,7 +24,6 @@ export function Popup(props: PopupProps) {
         <Posting close={() => props.closeThis()} />
       )}
       <div className="h-screen w-full z-20 bg-black opacity-70" />
-      <RemoveScrollBar />
     </div>
   );
 }

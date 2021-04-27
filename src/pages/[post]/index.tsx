@@ -23,7 +23,7 @@ export default function PostPage(props: HomeProps) {
         <Popup closeThis={() => setPopup(undefined)} currentPopup={popup} />
       )}
       <Left user={props.user} onPost={() => setPopup("posting")} />
-      {props.post.id}
+      {props.post.images}
       <Right />
     </div>
   );

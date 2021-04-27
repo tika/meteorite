@@ -7,6 +7,7 @@ import toast from "react-hot-toast";
 import { GridAdd } from "./svg/gridadd";
 import { createPostSchema } from "../schemas/posts";
 import { fetcher } from "@app/fetcher";
+import { Add } from "./svg/add";
 
 export type PopupState = "posting" | undefined;
 
@@ -32,6 +33,7 @@ export function Popup(props: PopupProps) {
 
 function Posting({ close }: { close(): void }) {
   const textarea = useRef<any | undefined>();
+  const uploadImg = useRef<any | undefined>();
   const [content, setContent] = useState("");
   const [imgs, setImgs] = useState<File[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -114,32 +116,24 @@ function Posting({ close }: { close(): void }) {
       className="fixed z-50 left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white px-6 py-4 rounded-lg">
       <Dialog.Overlay />
 
+      <input
+        type="file"
+        ref={uploadImg}
+        onChange={(e) =>
+          e.target.files && setImgs([...e.target.files, ...imgs])
+        }
+        className="hidden"
+        accept=".png,.jpg,.jpeg"
+        multiple
+      />
+
       <div className="flex flex-row justify-between mb-2">
         <Dialog.Title className="font-bold text-xl">New Post</Dialog.Title>
         <Cross className="w-6 cursor-pointer" onClick={() => close()} />
       </div>
 
-      <input
-        type="file"
-        name="ok"
-        onChange={(e) =>
-          e.target.files &&
-          e.target.files[0] &&
-          setImgs([e.target.files[0], ...imgs])
-        }
-        accept=".png,.jpg,.jpeg"
-      />
-
       {imgs.length > 0 && (
         <>
-          <div className="flex justify-between">
-            <p className="text-gray-700 font-medium">Images:</p>
-            <button className="flex gap-1 text-blue-600 focus:outline-none">
-              <GridAdd className="w-6" />
-              <h1>Attach Image</h1>
-            </button>
-          </div>
-
           <div
             className="flex flex-row gap-2 overflow-y-hidden"
             style={{ width: "calc(3rem + 1rem + 20rem + 4rem)" }}>
@@ -167,7 +161,13 @@ function Posting({ close }: { close(): void }) {
         />
       </div>
 
-      <div className="flex justify-center">
+      <div className="flex justify-center gap-4 items-center">
+        <div className="rounded-full flex h-12 p-3 justify-center items-center bg-gray-900 cursor-pointer hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+          <GridAdd
+            className="h-full text-white"
+            onClick={() => uploadImg!.current.click()}
+          />
+        </div>
         <button
           type="button"
           disabled={isSubmitting}

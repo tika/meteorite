@@ -88,11 +88,19 @@ function TextPost({ props }: { props: PassedProps }) {
           </h2>
         </div>
         <div>
-          {props.post.caption?.split("\n").map((line) => (
-            <p className="text-md break-words">{line}</p>
-          ))}
+          {props.post.caption
+            ?.trim()
+            .split("\n")
+            .map((line) => {
+              return (
+                <>
+                  <p className="text-md break-words">{line}</p>
+                  {line === "" && <br />}
+                </>
+              );
+            })}
         </div>
-        <div className="flex mt-4 justify-between w-full">
+        <div className="flex mt-2 justify-between w-full">
           <Heart
             className="h-6"
             isLiked={props.isLiked}
@@ -201,9 +209,17 @@ function ImagePost({ props }: { props: PassedProps }) {
           <div
             onClick={() => !expanded && setExpanded(true)}
             className={`line-clamp-${expanded ? "none" : "3"}`}>
-            {props.post.caption?.split("\n").map((line) => (
-              <p className="text-sm break-words">{line}</p>
-            ))}
+            {props.post.caption
+              ?.trim()
+              .split("\n")
+              .map((line) => {
+                return (
+                  <>
+                    <p className="text-md break-words">{line}</p>
+                    {line === "" && <br />}
+                  </>
+                );
+              })}
           </div>
 
           <div>

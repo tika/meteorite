@@ -73,44 +73,44 @@ export function PostElement(props: PostProps) {
 
 function TextPost({ props }: { props: PassedProps }) {
   return (
-    <div className="flex flex-col gap-3">
-      <div className="flex items-center gap-2">
-        <div className="max-w-full max-h-sm">
-          <img
-            src={props.profilePicture}
-            className="w-16 h-16 max-w-none object-cover rounded-md"
-          />
-        </div>
-        <div>
+    <div className="flex gap-2">
+      <div className="max-w-full max-h-sm">
+        <img
+          src={props.profilePicture}
+          className="w-16 h-16 max-w-none object-cover rounded-md"
+        />
+      </div>
+      <div className="w-full">
+        <div className="flex items-center justify-between w-full">
           <h1 className="font-bold">@{props.user.username}</h1>
           <h2 className="text-gray-600 font-medium text-sm">
             {autoDatify(new Date(props.post.createdAt))}
           </h2>
         </div>
-      </div>
-      <div>
-        {props.post.caption?.split("\n").map((line) => (
-          <p className="text-md break-words">{line}</p>
-        ))}
-      </div>
-      <div className="flex justify-between w-full">
-        <Heart
-          className="h-6"
-          isLiked={props.isLiked}
-          onClick={() => {
-            fetcher(
-              props.isLiked ? "DELETE" : "PUT",
-              `/posts/${props.post.id}/likes`
-            );
-            props.setIsLiked(!props.isLiked);
-          }}
-        />
-        <Chat
-          className="h-6"
-          onClick={() => props.setCommentingOnPost(props.post)}
-        />
-        <Bookmark className="h-6" />
-        <Share className="h-6" />
+        <div>
+          {props.post.caption?.split("\n").map((line) => (
+            <p className="text-md break-words">{line}</p>
+          ))}
+        </div>
+        <div className="flex mt-4 justify-between w-full">
+          <Heart
+            className="h-6"
+            isLiked={props.isLiked}
+            onClick={() => {
+              fetcher(
+                props.isLiked ? "DELETE" : "PUT",
+                `/posts/${props.post.id}/likes`
+              );
+              props.setIsLiked(!props.isLiked);
+            }}
+          />
+          <Chat
+            className="h-6"
+            onClick={() => props.setCommentingOnPost(props.post)}
+          />
+          <Bookmark className="h-6" />
+          <Share className="h-6" />
+        </div>
       </div>
     </div>
   );

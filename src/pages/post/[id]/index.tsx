@@ -69,9 +69,9 @@ export default function PostPage(props: HomeProps) {
       <div className="flex justify-center col-span-12 sm:col-span-6">
         <div className="w-96 flex items-center flex-col py-8 gap-10 ">
           <PostElement
-            setCommentingOnPost={(p: extendedPost) => {
+            onComment={() => {
               setPopup("commenting");
-              setPopupData(p);
+              setPopupData(props.post);
             }}
             currentUser={props.user}
             post={props.post}

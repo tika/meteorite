@@ -22,7 +22,7 @@ interface PostProps {
   post: extendedPost;
   currentUser: SafeUser;
   key: string;
-  setCommentingOnPost(post: extendedPost): void;
+  onComment(): void;
 }
 
 type PassedProps = PostProps & {
@@ -117,10 +117,7 @@ export function TextPost({ props }: { props: PassedProps }) {
               props.setIsLiked(!props.isLiked);
             }}
           />
-          <Chat
-            className="h-6"
-            onClick={() => props.setCommentingOnPost(props.post)}
-          />
+          <Chat className="h-6" onClick={() => props.onComment()} />
           <Bookmark className="h-6" />
           <Share className="h-6" />
         </div>
@@ -240,10 +237,7 @@ export function ImagePost({ props }: { props: PassedProps }) {
                   props.setIsLiked(!props.isLiked);
                 }}
               />
-              <Chat
-                className="h-6"
-                onClick={() => props.setCommentingOnPost(props.post)}
-              />
+              <Chat className="h-6" onClick={() => props.onComment()} />
               <Bullet className="ml-1 mr-2" />
               <p className="font-semibold text-sm text-gray-600">
                 {autoDatify(new Date(props.post.createdAt))}

@@ -12,9 +12,7 @@ export function Feed(props: Props) {
     <div className="flex items-center flex-col py-8 gap-10 col-span-12 sm:col-span-6">
       {props.posts.map((post) => (
         <PostElement
-          setCommentingOnPost={(p: extendedPost) =>
-            props.setCommentingOnPost(p)
-          }
+          onComment={() => props.setCommentingOnPost(post)}
           currentUser={props.user}
           post={post}
           key={post.id}

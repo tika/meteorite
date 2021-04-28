@@ -16,17 +16,26 @@ type HomeProps = {
 export default function Home(props: HomeProps) {
   const [commentingOnPost, setCommentingOnPost] = useState<extendedPost>();
   const [popup, setPopup] = useState<PopupState>();
+  const [popupData, setPopupData] = useState<any | undefined>();
 
   return (
     <div className="h-full grid grid-cols-12 max-w-full">
       {popup && (
-        <Popup closeThis={() => setPopup(undefined)} currentPopup={popup} />
+        <Popup
+          closeThis={() => setPopup(undefined)}
+          currentData={popupData}
+          currentPopup={popup}
+        />
       )}
       <Left user={props.user} onPost={() => setPopup("posting")} />
       <Feed
         posts={props.posts}
         user={props.user}
-        setCommentingOnPost={(p) => setCommentingOnPost(p)}
+        setCommentingOnPost={(p) => {
+          setPopup("commenting");
+          setPopupData(p);
+        }}
+        // setCommentingOnPost={(p) => setCommentingOnPost(p)}
       />
       <Right />
     </div>

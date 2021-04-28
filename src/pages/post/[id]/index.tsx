@@ -1,5 +1,5 @@
 import { GetServerSideProps } from "next";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { JWT, JWTPayload } from "@app/jwt";
 import { prisma } from "@app/prisma";
 import { extendedPost, ImagePost, PostElement } from "@components/post";
@@ -14,19 +14,26 @@ type HomeProps = {
 };
 
 export default function PostPage(props: HomeProps) {
-  const [commentingOnPost, setCommentingOnPost] = useState<extendedPost>();
   const [popup, setPopup] = useState<PopupState>();
+  const [popupData, setPopupData] = useState<any | undefined>();
 
   return (
     <div className="h-full grid grid-cols-12 max-w-full">
       {popup && (
-        <Popup closeThis={() => setPopup(undefined)} currentPopup={popup} />
+        <Popup
+          closeThis={() => setPopup(undefined)}
+          currentData={popupData}
+          currentPopup={popup}
+        />
       )}
       <Left user={props.user} onPost={() => setPopup("posting")} />
       <div className="flex justify-center col-span-12 sm:col-span-6">
         <div className="w-96 flex items-center flex-col py-8 gap-10 ">
           <PostElement
-            setCommentingOnPost={(p: extendedPost) => setCommentingOnPost(p)}
+            setCommentingOnPost={(p: extendedPost) => {
+              setPopup("commenting");
+              setPopupData(p);
+            }}
             currentUser={props.user}
             post={props.post}
             key={props.post.id}

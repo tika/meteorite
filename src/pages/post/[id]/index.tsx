@@ -7,6 +7,7 @@ import { Feed } from "@components/pages/feed";
 import { Left } from "@components/pages/left";
 import { Right } from "@components/pages/right";
 import { Popup, PopupState } from "@components/popup";
+import { CommentElement } from "@components/commentelement";
 
 type HomeProps = {
   user: JWTPayload;
@@ -46,6 +47,11 @@ export default function PostPage(props: HomeProps) {
             <p className="font-semibold">0 saves</p>
           </div>
           <div className="w-full bg-gray-500" style={{ height: "1px" }} />
+          <div className="flex w-full flex-col gap-4">
+            {props.post.comments.map((comment) => (
+              <CommentElement comment={comment} />
+            ))}
+          </div>
         </div>
       </div>
       <Right />

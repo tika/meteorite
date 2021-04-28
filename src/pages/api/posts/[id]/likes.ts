@@ -1,5 +1,5 @@
 import { createEndpoint } from "@app/endpoint";
-import { DisplayedError, NotFound } from "@app/exceptions";
+import { NotFound } from "@app/exceptions";
 import { JWT } from "@app/jwt";
 import { prisma } from "@app/prisma";
 

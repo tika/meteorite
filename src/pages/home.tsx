@@ -54,9 +54,9 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     };
   }
 
-  const posts = await prisma.post.findMany({
+  const posts: extendedPost[] | null = await prisma.post.findMany({
     where: { authorId: user.id },
-    include: { comments: true, likedBy: true },
+    include: { comments: true, likedBy: true, savedBy: true },
   });
 
   let diffPosts: any[] = posts;

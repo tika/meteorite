@@ -56,7 +56,9 @@ export function Left(props: LeftProps) {
               <Profile className="w-6" />
               <h1 className="font-semibold text-lg">Profile</h1>
             </div>
-            <div className="flex flex-row gap-2 items-center hover:bg-black hover:bg-opacity-10 transition duration-200 rounded-full px-3 py-2 cursor-pointer">
+            <div
+              onClick={() => router.push("/saved")}
+              className="flex flex-row gap-2 items-center hover:bg-black hover:bg-opacity-10 transition duration-200 rounded-full px-3 py-2 cursor-pointer">
               <Bookmark className="w-6" />
               <h1 className="font-semibold text-lg">Saved</h1>
             </div>

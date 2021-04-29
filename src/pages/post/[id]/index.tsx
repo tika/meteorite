@@ -124,9 +124,9 @@ export default function PostPage(props: HomeProps) {
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const user = JWT.parseRequest(ctx.req);
 
-  let post = await prisma.post.findFirst({
+  let post: extendedPost | null = await prisma.post.findFirst({
     where: { id: ctx.query.id as string },
-    include: { comments: true, likedBy: true },
+    include: { comments: true, likedBy: true, savedBy: true },
   });
 
   if (!post) {

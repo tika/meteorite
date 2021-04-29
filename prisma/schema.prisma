@@ -27,6 +27,8 @@ model User {
   // Comments
   comments      Comment[] @relation("UserAuthorsComment")
   likedComments Comment[] @relation("UserLikesComment")
+
+  savedPosts Post[] @relation("UserSavesPost")
 }
 
 model Post {
@@ -40,6 +42,7 @@ model Post {
   authorId String
 
   likedBy User[] @relation("UserLikesPost", references: [id])
+  savedBy User[] @relation("UserSavesPost", references: [id])
 
   comments Comment[] @relation("PostHasComment")
 }

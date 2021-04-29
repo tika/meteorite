@@ -76,9 +76,7 @@ export function TextPost({ props }: { props: PassedProps }) {
   const router = useRouter();
 
   return (
-    <div
-      className="flex gap-2"
-      onClick={() => router.push(`/post/${props.post.id}`)}>
+    <div className="flex gap-2">
       <div className="max-w-full max-h-sm">
         <img
           src={props.profilePicture}
@@ -86,13 +84,15 @@ export function TextPost({ props }: { props: PassedProps }) {
         />
       </div>
       <div className="w-full">
-        <div className="flex items-center justify-between w-full">
+        <div
+          className="flex items-center justify-between w-full"
+          onClick={() => router.push(`/post/${props.post.id}`)}>
           <h1 className="font-bold">@{props.user.username}</h1>
           <h2 className="text-gray-600 font-medium text-sm">
             {autoDatify(new Date(props.post.createdAt))}
           </h2>
         </div>
-        <div>
+        <div onClick={() => router.push(`/post/${props.post.id}`)}>
           {props.post.caption
             ?.trim()
             .split("\n")
@@ -132,6 +132,7 @@ export function ImagePost({ props }: { props: PassedProps }) {
   const [index, setIndex] = useState(0);
   const [expanded, setExpanded] = useState(false);
   const imgRef = useRef<any>();
+  const router = useRouter();
 
   function onImageLoad(e: any) {
     new FastAverageColor()
@@ -209,7 +210,11 @@ export function ImagePost({ props }: { props: PassedProps }) {
 
         <div className="flex flex-col gap-1 w-full" style={{ width: "18rem" }}>
           <div
-            onClick={() => !expanded && setExpanded(true)}
+            onClick={() =>
+              expanded
+                ? router.push(`/post/${props.post.id}`)
+                : setExpanded(true)
+            }
             className={`line-clamp-${expanded ? "none" : "3"}`}>
             {props.post.caption
               ?.trim()

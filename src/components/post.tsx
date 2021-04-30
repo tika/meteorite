@@ -131,14 +131,14 @@ export function TextPost({ props }: { props: PassedProps }) {
           />
           <Chat className="h-6" onClick={() => props.onComment()} />
           <Bookmark
-            className="h-6"
+            className="h-6 text-blue-400"
             isSaved={props.isSaved}
             onClick={() => {
               fetcher(
-                props.isLiked ? "DELETE" : "PUT",
+                props.isSaved ? "DELETE" : "PUT",
                 `/posts/${props.post.id}/saves`
               );
-              props.setIsLiked(!props.isSaved);
+              props.setIsSaved(!props.isSaved);
             }}
           />
           <Share className="h-6" />
@@ -186,17 +186,16 @@ export function ImagePost({ props }: { props: PassedProps }) {
         </div>
         <div className="relative w-full h-96 bg-gray-100 shadow-sm rounded-lg">
           <Bookmark
+            className="absolute top-5 right-5 z-20 w-6 text-blue-400"
+            color={averageColor?.isDark ? "text-white" : "text-dark"}
             isSaved={props.isSaved}
             onClick={() => {
               fetcher(
-                props.isLiked ? "DELETE" : "PUT",
+                props.isSaved ? "DELETE" : "PUT",
                 `/posts/${props.post.id}/saves`
               );
-              props.setIsLiked(!props.isSaved);
+              props.setIsSaved(!props.isSaved);
             }}
-            className={`absolute top-5 right-5 z-20 w-6 ${
-              averageColor?.isDark ? "text-white" : "text-dark"
-            }`}
           />
           <div className="absolute top-0 z-10 left-0 w-96 h-96">
             <motion.img

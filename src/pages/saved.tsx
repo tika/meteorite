@@ -27,17 +27,15 @@ export default function Saved(props: HomeProps) {
         />
       )}
       <Left user={props.user} onPost={() => setPopup("posting")} />
-      {props.posts && (
-        <Feed
-          posts={props.posts}
-          user={props.user}
-          setCommentingOnPost={(p) => {
-            setPopup("commenting");
-            setPopupData(p);
-          }}
-        />
-      )}
-
+      <Feed
+        posts={props.posts}
+        user={props.user}
+        text={"Your Saved Posts"}
+        setCommentingOnPost={(p) => {
+          setPopup("commenting");
+          setPopupData(p);
+        }}
+      />
       <Right />
     </div>
   );

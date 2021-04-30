@@ -1,5 +1,5 @@
 import { GetServerSideProps } from "next";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { JWT, JWTPayload } from "@app/jwt";
 import { prisma } from "@app/prisma";
 import { extendedPost, PostElement } from "@components/post";
@@ -14,9 +14,25 @@ type HomeProps = {
 };
 
 export default function Home(props: HomeProps) {
-  const [commentingOnPost, setCommentingOnPost] = useState<extendedPost>();
   const [popup, setPopup] = useState<PopupState>();
   const [popupData, setPopupData] = useState<any | undefined>();
+
+  useEffect(() => {
+    console.log("hi");
+    handleScrollPosition();
+    window.onscroll = () => {
+      if (window.pageYOffset > 0)
+        sessionStorage.setItem("scrollPosition", window.pageYOffset.toString());
+    };
+  }, [props]);
+
+  function handleScrollPosition() {
+    const scrollPos = sessionStorage.getItem("scrollPosition");
+    if (scrollPos) {
+      window.scrollTo(0, parseFloat(scrollPos));
+      sessionStorage.removeItem("scrollPosition");
+    }
+  }
 
   return (
     <div className="h-full grid grid-cols-12 max-w-full">
@@ -35,7 +51,6 @@ export default function Home(props: HomeProps) {
           setPopup("commenting");
           setPopupData(p);
         }}
-        // setCommentingOnPost={(p) => setCommentingOnPost(p)}
       />
       <Right />
     </div>

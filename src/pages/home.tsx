@@ -2,7 +2,7 @@ import { GetServerSideProps } from "next";
 import { useEffect, useState } from "react";
 import { JWT, JWTPayload } from "@app/jwt";
 import { prisma } from "@app/prisma";
-import { extendedPost, PostElement } from "@components/post";
+import { extendedPost } from "@components/post";
 import { Feed } from "@components/pages/feed";
 import { Left } from "@components/pages/left";
 import { Right } from "@components/pages/right";
@@ -18,19 +18,21 @@ export default function Home(props: HomeProps) {
   const [popupData, setPopupData] = useState<any | undefined>();
 
   useEffect(() => {
-    console.log("hi");
     handleScrollPosition();
     window.onscroll = () => {
       if (window.pageYOffset > 0)
-        sessionStorage.setItem("scrollPosition", window.pageYOffset.toString());
+        sessionStorage.setItem(
+          "homeScrollPosition",
+          window.pageYOffset.toString()
+        );
     };
   }, [props]);
 
   function handleScrollPosition() {
-    const scrollPos = sessionStorage.getItem("scrollPosition");
+    const scrollPos = sessionStorage.getItem("homeScrollPosition");
     if (scrollPos) {
       window.scrollTo(0, parseFloat(scrollPos));
-      sessionStorage.removeItem("scrollPosition");
+      sessionStorage.removeItem("homeScrollPosition");
     }
   }
 

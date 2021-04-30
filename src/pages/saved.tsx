@@ -1,5 +1,5 @@
 import { GetServerSideProps } from "next";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { JWT, JWTPayload } from "@app/jwt";
 import { prisma } from "@app/prisma";
 import { extendedPost, PostElement } from "@components/post";
@@ -16,6 +16,25 @@ type HomeProps = {
 export default function Saved(props: HomeProps) {
   const [popup, setPopup] = useState<PopupState>();
   const [popupData, setPopupData] = useState<any | undefined>();
+
+  useEffect(() => {
+    handleScrollPosition();
+    window.onscroll = () => {
+      if (window.pageYOffset > 0)
+        sessionStorage.setItem(
+          "savedScrollPosition",
+          window.pageYOffset.toString()
+        );
+    };
+  }, [props]);
+
+  function handleScrollPosition() {
+    const scrollPos = sessionStorage.getItem("savedScrollPosition");
+    if (scrollPos) {
+      window.scrollTo(0, parseFloat(scrollPos));
+      sessionStorage.removeItem("savedScrollPosition");
+    }
+  }
 
   return (
     <div className="h-full grid grid-cols-12 max-w-full">

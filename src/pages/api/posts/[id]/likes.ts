@@ -49,6 +49,14 @@ export default createEndpoint({
         },
       },
     });
+    
+    await prisma.notification.deleteMany({
+      where: {
+        contentId: post.id,
+        authorId: user.id,
+        notifiedUserId: post.authorId
+      }
+    });
 
     res.json({ success: true });
   },
@@ -78,6 +86,16 @@ export default createEndpoint({
           },
         },
       },
+    });
+
+    await prisma.notification.create({
+      data: {
+        contentId: postId,
+        contentType: "post",
+        action: "like",
+        notifiedUserId: post.authorId,
+        authorId: user.id
+      }
     });
 
     res.json({ success: true });

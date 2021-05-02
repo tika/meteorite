@@ -5,6 +5,17 @@ import { prisma } from "@app/prisma";
 import { editPostSchema } from "@schemas/posts";
 
 export default createEndpoint({
+  GET: async (req, res) => {
+    const post = await prisma.post.findFirst({
+      where: { id: req.query.id as string },
+    });
+
+    if (!post) {
+      throw new NotFound("post");
+    }
+
+    res.json(post);
+  },
   DELETE: async (req, res) => {
     const user = JWT.parseRequest(req);
     const id = req.query.id as string;

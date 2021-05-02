@@ -72,7 +72,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   }
 
   const posts: extendedPost[] | null = await prisma.post.findMany({
-    where: { authorId: user.id },
+    // where: { authorId: user.id },
     include: { comments: true, likedBy: true, savedBy: true },
   });
 

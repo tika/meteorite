@@ -44,7 +44,9 @@ export function Left(props: LeftProps) {
               <Home className="w-6" />
               <h1 className="font-semibold text-lg">Home</h1>
             </div>
-            <div className="flex flex-row gap-2 items-center hover:bg-black hover:bg-opacity-10 transition duration-200 rounded-full px-3 py-2 cursor-pointer">
+            <div
+              onClick={() => router.push("/notifications")}
+              className="flex flex-row gap-2 items-center hover:bg-black hover:bg-opacity-10 transition duration-200 rounded-full px-3 py-2 cursor-pointer">
               <Bell className="w-6" />
               <h1 className="font-semibold text-lg">Notifications</h1>
             </div>

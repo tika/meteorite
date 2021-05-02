@@ -5,15 +5,22 @@ import { prisma } from "@app/prisma";
 import { Left } from "@components/pages/left";
 import { Right } from "@components/pages/right";
 import { Popup, PopupState } from "@components/popup";
-import { Notification } from ".prisma/client";
+import { Notification, Post } from ".prisma/client";
 import { NotificationElement } from "../components/notificationelement";
+import { fetcher } from "@app/fetcher";
+import { SafeUser } from "@components/post";
 
-type HomeProps = {
+type NotificationProps = {
   user: JWTPayload;
-  notifications: Notification[];
+  notifications: extendedNotification[];
 };
 
-export default function Notifications(props: HomeProps) {
+export type extendedNotification = Notification & {
+  author: SafeUser;
+  content: Post;
+};
+
+export default function Notifications(props: NotificationProps) {
   const [popup, setPopup] = useState<PopupState>();
   const [popupData, setPopupData] = useState<any | undefined>();
 
@@ -76,19 +83,24 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     };
   }
 
-  // const posts: extendedPost[] | null = await prisma.post.findMany({
-  //   where: { authorId: user.id },
-  //   include: { comments: true, likedBy: true, savedBy: true },
-  // });
-
-  const notifications = await prisma.notification.findMany({
+  let notifications: any[] = await prisma.notification.findMany({
     where: {
       notifiedUserId: user.id,
     },
+    include: {
+      author: true,
+    },
   });
 
-  // let diffPosts: any[] = posts;
-  // diffPosts.map((p) => (p.createdAt = p.createdAt.toISOString()));
+  notifications = await Promise.all(
+    notifications.map(async (n) => {
+      const t = await prisma.post.findFirst({ where: { id: n.contentId } });
+      n.content = t;
+      const { email, password, ...rest } = n.author;
+      n.author = rest;
+      return n;
+    })
+  );
 
   return {
     props: { user, notifications: JSON.parse(JSON.stringify(notifications)) },

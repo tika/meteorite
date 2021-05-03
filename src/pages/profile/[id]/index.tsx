@@ -6,6 +6,10 @@ import { extendedPost, SafeUser } from "@components/post";
 import { Left } from "@components/pages/left";
 import { Right } from "@components/pages/right";
 import { Popup, PopupState } from "@components/popup";
+import { Fire } from "@components/svg/fire";
+import { Calendar } from "@components/svg/calendar";
+import { Pin } from "../../../components/svg/pin";
+import { Dots } from "@components/svg/dots";
 
 type ProfileProps = {
   user: JWTPayload;
@@ -47,9 +51,9 @@ export default function ProfilePage(props: ProfileProps) {
       <Left user={props.user} onPost={() => setPopup("posting")} />
       <div className="flex justify-center col-span-12 sm:col-span-6">
         <div className="w-96 flex items-center flex-col py-8 gap-10">
-          <div className="relative">
+          <div className="relative flex justify-center">
             <img src={profileBanner} className="object-cover rounded-md h-64" />
-            <div className="absolute px-4 py-2 bg-white rounded-lg -bottom-10 transform -translate-x-1/2 md:transform-none left-1/2 md:left-5 flex items-center gap-2">
+            <div className="absolute px-4 w-5/6 py-2 bg-white rounded-lg -bottom-10 flex items-center gap-2">
               <div className="max-w-full max-h-sm">
                 <img
                   src={profilePicture}
@@ -57,16 +61,60 @@ export default function ProfilePage(props: ProfileProps) {
                 />
               </div>
               <div>
-                <h1 className="font-semibold">@{props.user.username}</h1>
-                <h2>Joined 16th October</h2>
+                <h1 className="font-bold text-lg">@sixteenyearold</h1>
+                <div className="flex items-center">
+                  <Fire className="w-5" />
+                  <h2 className="font-semibold text-sm">#14 in the world</h2>
+                </div>
               </div>
             </div>
           </div>
-          <div className="py-4 px-3">
-            <p className="text-sm">
+          <div className="py-4 px-4 flex flex-col gap-4">
+            <p className="text-md font-medium">
               Embedded software; CoderDojoDC; Creator and co-author of the
               Nerves Project; Marathon running
             </p>
+            <div className="flex justify-evenly">
+              <div className="flex items-center gap-2">
+                <Pin className="h-6 text-blue-700" />
+                <h1 className="font-semibold">London</h1>
+              </div>
+              <div className="flex items-center gap-2">
+                <Calendar className="h-6 text-blue-700" />
+                <h1>
+                  Joined <span className="font-semibold">June 2021</span>
+                </h1>
+              </div>
+            </div>
+            <div className="flex justify-between">
+              <button
+                type="button"
+                disabled={isSubmitting}
+                className="justify-center w-40 text-white items-center px-6 py-3 border border-transparent text-sm font-semibold rounded-full shadow-s bg-gray-900 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                Follow
+              </button>
+              <div className="rounded-full flex h-12 p-3 justify-center items-center bg-gray-900 cursor-pointer hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                <Dots className="h-full text-white" />
+              </div>
+            </div>
+            <div className="flex justify-between mt-5">
+              <h1 className="font-semibold cursor-pointer">
+                164 <span className="text-gray-500 font-medium">Following</span>
+              </h1>
+              <h1 className="font-semibold cursor-pointer">
+                6.6M{" "}
+                <span className="text-gray-500 font-medium">Followers</span>
+              </h1>
+              <h1 className="font-semibold cursor-pointer">
+                52 <span className="text-gray-500 font-medium">Posts</span>
+              </h1>
+            </div>
+            <div className="flex w-full justify-center mt-4">
+              <div
+                className="w-5/6 bg-gray-600 rounded-lg"
+                style={{ height: "2px" }}
+              />
+            </div>
           </div>
         </div>
       </div>

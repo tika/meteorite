@@ -54,7 +54,9 @@ export function Left(props: LeftProps) {
               <Mail className="w-6" />
               <h1 className="font-semibold text-lg">Messages</h1>
             </div>
-            <div className="flex flex-row gap-2 items-center hover:bg-black hover:bg-opacity-10 transition duration-200 rounded-full px-3 py-2 cursor-pointer">
+            <div
+              onClick={() => router.push(`/profile/${props.user.id}`)}
+              className="flex flex-row gap-2 items-center hover:bg-black hover:bg-opacity-10 transition duration-200 rounded-full px-3 py-2 cursor-pointer">
               <Profile className="w-6" />
               <h1 className="font-semibold text-lg">Profile</h1>
             </div>

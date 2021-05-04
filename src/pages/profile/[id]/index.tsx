@@ -19,8 +19,6 @@ type ProfileProps = {
 };
 
 export default function ProfilePage(props: ProfileProps) {
-  const textarea = useRef<any | undefined>();
-
   const [popup, setPopup] = useState<PopupState>();
   const [popupData, setPopupData] = useState<any | undefined>();
 

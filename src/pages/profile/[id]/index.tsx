@@ -10,10 +10,12 @@ import { Fire } from "@components/svg/fire";
 import { Calendar } from "@components/svg/calendar";
 import { Pin } from "../../../components/svg/pin";
 import { Dots } from "@components/svg/dots";
+import { Feed } from "@components/pages/feed";
 
 type ProfileProps = {
   user: JWTPayload;
   profile: SafeUser;
+  posts: extendedPost[];
 };
 
 export default function ProfilePage(props: ProfileProps) {
@@ -61,7 +63,7 @@ export default function ProfilePage(props: ProfileProps) {
                 />
               </div>
               <div>
-                <h1 className="font-bold text-lg">@sixteenyearold</h1>
+                <h1 className="font-bold text-lg">@{props.user.username}</h1>
                 <div className="flex items-center">
                   <Fire className="w-5" />
                   <h2 className="font-semibold text-sm">#14 in the world</h2>
@@ -111,10 +113,20 @@ export default function ProfilePage(props: ProfileProps) {
             </div>
             <div className="flex w-full justify-center mt-4">
               <div
-                className="w-5/6 bg-gray-600 rounded-lg"
+                className="w-5/6 bg-gray-400 rounded-lg"
                 style={{ height: "2px" }}
               />
             </div>
+            {props.posts && (
+              <Feed
+                posts={props.posts}
+                user={props.user}
+                setCommentingOnPost={(p) => {
+                  setPopup("commenting");
+                  setPopupData(p);
+                }}
+              />
+            )}
           </div>
         </div>
       </div>
@@ -138,5 +150,21 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   const { password, email, ...rest } = profile;
 
-  return { props: { user, profile: JSON.parse(JSON.stringify(rest)) } };
+  let posts = await prisma.post.findMany({
+    where: { authorId: ctx.query.id as string },
+    include: { comments: true, likedBy: true, savedBy: true },
+  });
+
+  console.log(posts);
+
+  let diffPosts: any[] = posts;
+  diffPosts.map((p) => (p.createdAt = p.createdAt.toISOString()));
+
+  return {
+    props: {
+      user,
+      profile: JSON.parse(JSON.stringify(rest)),
+      posts: JSON.parse(JSON.stringify(diffPosts)),
+    },
+  };
 };

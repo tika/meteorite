@@ -20,8 +20,6 @@ type ProfileProps = {
 
 export default function ProfilePage(props: ProfileProps) {
   const textarea = useRef<any | undefined>();
-  const [content, setContent] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [popup, setPopup] = useState<PopupState>();
   const [popupData, setPopupData] = useState<any | undefined>();
@@ -32,14 +30,7 @@ export default function ProfilePage(props: ProfileProps) {
   const profilePicture =
     "https://images.pexels.com/photos/1704488/pexels-photo-1704488.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500";
 
-  useEffect(() => {
-    if (textarea && textarea.current) {
-      textarea.current.style.height = "0px";
-      const scrollHeight = textarea.current.scrollHeight;
-      textarea.current.style.height =
-        Math.max(72, Math.min(scrollHeight, 170)) + "px";
-    }
-  }, [content]);
+  useEffect(() => window.scrollTo(0, 0), []); // Scroll to top
 
   return (
     <div className="h-full grid grid-cols-12 max-w-full">
@@ -91,7 +82,6 @@ export default function ProfilePage(props: ProfileProps) {
             <div className="flex justify-between">
               <button
                 type="button"
-                disabled={isSubmitting}
                 className="justify-center w-40 text-white items-center px-6 py-3 border border-transparent text-sm font-semibold rounded-full shadow-s bg-gray-900 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                 Follow
               </button>

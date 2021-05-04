@@ -89,7 +89,9 @@ export function TextPost({ props }: { props: PassedProps }) {
 
   return (
     <div className="flex gap-2">
-      <div className="max-w-full max-h-sm">
+      <div
+        className="max-w-full max-h-sm"
+        onClick={() => router.push(`/profile/${props.user.id}`)}>
         <img
           src={props.profilePicture}
           className="w-16 h-16 max-w-none object-cover rounded-md"
@@ -230,7 +232,9 @@ export function ImagePost({ props }: { props: PassedProps }) {
         </div>
       </div>
       <div className="w-96 flex flex-row items-start gap-4 self-center">
-        <div className="max-w-full max-h-sm">
+        <div
+          className="max-w-full max-h-sm"
+          onClick={() => router.push(`/${props.user.id}`)}>
           <img
             src={props.profilePicture}
             className="w-20 h-20 max-w-none object-cover rounded-md"

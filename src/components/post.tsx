@@ -234,7 +234,7 @@ export function ImagePost({ props }: { props: PassedProps }) {
       <div className="w-96 flex flex-row items-start gap-4 self-center">
         <div
           className="max-w-full max-h-sm"
-          onClick={() => router.push(`/${props.user.id}`)}>
+          onClick={() => router.push(`/profile/${props.user.id}`)}>
           <img
             src={props.profilePicture}
             className="w-20 h-20 max-w-none object-cover rounded-md"

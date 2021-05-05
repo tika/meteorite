@@ -10,9 +10,11 @@ import { motion } from "framer-motion";
 import { autoDatify } from "@app/timeutils";
 import { Bullet } from "@components/svg/bullet";
 import FastAverageColor from "fast-average-color";
-import { useEffect } from "react";
 import { Share } from "./svg/share";
 import { useRouter } from "next/dist/client/router";
+import copy from "copy-to-clipboard";
+import { url } from "@app/constants";
+import toast from "react-hot-toast";
 
 export type SafeUser = Omit<User, "password" | "email">;
 
@@ -87,6 +89,11 @@ export function PostElement(props: PostProps) {
 export function TextPost({ props }: { props: PassedProps }) {
   const router = useRouter();
 
+  function share() {
+    copy(`${url}/${props.post.id}`);
+    toast.success("Copied link to clipboard!");
+  }
+
   return (
     <div className="flex gap-2">
       <div
@@ -143,7 +150,7 @@ export function TextPost({ props }: { props: PassedProps }) {
               props.setIsSaved(!props.isSaved);
             }}
           />
-          <Share className="h-6" />
+          <Share onClick={share} className="h-6" />
         </div>
       </div>
     </div>

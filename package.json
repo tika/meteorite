@@ -16,6 +16,7 @@
     "aws-sdk": "^2.892.0",
     "bcrypt": "^5.0.1",
     "cookie": "^0.4.1",
+    "copy-to-clipboard": "^3.3.1",
     "csstype": "2.6.2",
     "dayjs": "^1.10.4",
     "fast-average-color": "^6.4.0",

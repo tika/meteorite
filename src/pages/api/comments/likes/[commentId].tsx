@@ -21,7 +21,7 @@ export default createEndpoint({
       return rest;
     });
 
-    res.json({ likedBy: comment });
+    res.json({ likedBy: safeUsers });
   },
   DELETE: async (req, res) => {
     const user = JWT.parseRequest(req);

@@ -14,4 +14,5 @@ export const editPostSchema = z.object({
 
 export const createCommentSchema = z.object({
   content,
+  parentId: z.string().optional()
 });

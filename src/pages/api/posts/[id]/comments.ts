@@ -4,9 +4,8 @@ import { JWT } from "@app/jwt";
 import { prisma } from "@app/prisma";
 import { createCommentSchema } from "@schemas/posts";
 
-// GET => [ comment, comment1 ]
-// [Auth] PUT, { content: string } => comment
-// [Auth] DELETE => { success: true }
+// GET (comments on post) => [ comment, comment1 ]
+// [Auth] PUT, { content: string, parentId: string } => comment
 
 export default createEndpoint({
   GET: async (req, res) => {
@@ -25,35 +24,6 @@ export default createEndpoint({
 
     res.json({ comments: comments });
   },
-  DELETE: async (req, res) => {
-    const user = JWT.parseRequest(req);
-    const postId = req.query.id as string;
-
-    if (!user) {
-      throw new NotFound("user");
-    }
-
-    const post = await prisma.post.findFirst({
-      where: { id: postId },
-    });
-
-    if (!post) {
-      throw new NotFound("post");
-    }
-
-    await prisma.post.update({
-      where: { id: postId },
-      data: {
-        comments: {
-          disconnect: {
-            id: user.id,
-          },
-        },
-      },
-    });
-
-    res.json({ success: true });
-  },
   PUT: async (req, res) => {
     const user = JWT.parseRequest(req);
 
@@ -62,7 +32,7 @@ export default createEndpoint({
     }
 
     const postId = req.query.id as string;
-    const { content } = createCommentSchema.parse(req.body);
+    const { content, parentId } = createCommentSchema.parse(req.body);
 
     const post = await prisma.post.findFirst({
       where: { id: postId },
@@ -72,11 +42,22 @@ export default createEndpoint({
       throw new NotFound("post");
     }
 
+    if (parentId) {
+      const parentComment = await prisma.comment.findFirst({
+        where: { id: parentId }
+      });
+
+      if (!parentComment) {
+        throw new NotFound("parent comment");
+      }
+    }
+
     const comment = await prisma.comment.create({
       data: {
         authorId: user.id,
         postId: postId,
         content: content,
+        parentCommentId: parentId,
       },
     });
 

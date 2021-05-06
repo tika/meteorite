@@ -62,6 +62,10 @@ model Comment {
   author   User   @relation("UserAuthorsComment", fields: [authorId], references: [id])
   authorId String
 
+  parentCommentId String?
+  parentComment   Comment?  @relation("CommentHasParent", references: [id], fields: [parentCommentId])
+  childComments   Comment[] @relation("CommentHasParent")
+
   likedBy User[] @relation("UserLikesComment", references: [id])
 }
 

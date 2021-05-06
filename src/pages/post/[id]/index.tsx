@@ -2,7 +2,7 @@ import { GetServerSideProps } from "next";
 import { useEffect, useRef, useState } from "react";
 import { JWT, JWTPayload } from "@app/jwt";
 import { prisma } from "@app/prisma";
-import { extendedPost, ImagePost, PostElement } from "@components/post";
+import { extendedComment, extendedPost, PostElement } from "@components/post";
 import { Left } from "@components/pages/left";
 import { Right } from "@components/pages/right";
 import { Popup, PopupState } from "@components/popup";
@@ -11,15 +11,18 @@ import { createCommentSchema } from "../../../schemas/posts";
 import toast from "react-hot-toast";
 import { fetcher } from "@app/fetcher";
 
-type HomeProps = {
+type PostPageProps = {
   user: JWTPayload;
   post: extendedPost;
+  comments: extendedComment[];
 };
 
-export default function PostPage(props: HomeProps) {
+export default function PostPage(props: PostPageProps) {
   const textarea = useRef<any | undefined>();
   const [content, setContent] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  console.log(props.comments);
 
   const [popup, setPopup] = useState<PopupState>();
   const [popupData, setPopupData] = useState<any | undefined>();
@@ -110,7 +113,7 @@ export default function PostPage(props: HomeProps) {
           </div>
           <div className="w-full bg-gray-500 -mt-4" style={{ height: "1px" }} />
           <div className="flex w-full flex-col gap-4">
-            {props.post.comments.map((comment) => (
+            {props.comments.map((comment) => (
               <CommentElement comment={comment} />
             ))}
           </div>
@@ -126,7 +129,13 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   let post: extendedPost | null = await prisma.post.findFirst({
     where: { id: ctx.query.id as string },
-    include: { comments: true, likedBy: true, savedBy: true },
+    include: {
+      comments: {
+        include: { likedBy: true, childComments: true, parentComment: true },
+      },
+      likedBy: true,
+      savedBy: true,
+    },
   });
 
   if (!post) {
@@ -135,5 +144,13 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     };
   }
 
-  return { props: { user, post: JSON.parse(JSON.stringify(post)) } };
+  console.log(post.comments);
+
+  return {
+    props: {
+      user,
+      post: JSON.parse(JSON.stringify(post)),
+      comments: JSON.parse(JSON.stringify(post.comments)),
+    },
+  };
 };

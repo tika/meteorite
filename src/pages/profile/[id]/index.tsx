@@ -140,10 +140,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   let posts = await prisma.post.findMany({
     where: { authorId: ctx.query.id as string },
-    include: { comments: true, likedBy: true, savedBy: true },
   });
-
-  console.log(posts);
 
   let diffPosts: any[] = posts;
   diffPosts.map((p) => (p.createdAt = p.createdAt.toISOString()));

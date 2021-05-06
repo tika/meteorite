@@ -1,15 +1,14 @@
-import { Comment } from ".prisma/client";
 import { fetcher } from "@app/fetcher";
 import { autoDatify } from "@app/timeutils";
 import React, { useState } from "react";
 import useSWR from "swr";
-import { SafeUser } from "@components/post";
+import { extendedComment, SafeUser } from "@components/post";
 import HashLoader from "react-spinners/HashLoader";
 import { Bullet } from "./svg/bullet";
 import { Heart } from "./svg/heart";
 import { Chat } from "./svg/chat";
 
-export function CommentElement({ comment }: { comment: Comment }) {
+export function CommentElement({ comment }: { comment: extendedComment }) {
   const { data, error } = useSWR<SafeUser>(
     `/users?id=${comment.authorId}`,
     (url) => fetcher("GET", url)
@@ -60,11 +59,11 @@ export function CommentElement({ comment }: { comment: Comment }) {
             <div className="flex items-center w-full gap-4 mt-2">
               <div className="flex">
                 <Heart className="h-6" isLiked={false} onClick={() => null} />
-                {"5M"} likes
+                {comment.likedBy.length} likes
               </div>
               <div className="flex">
                 <Chat className="h-6" />
-                {"5"} replies
+                {comment.childComments.length} replies
               </div>
             </div>
           </div>

@@ -24,6 +24,12 @@ export type extendedPost = Post & {
   savedBy: User[];
 };
 
+export type extendedComment = Comment & {
+  likedBy: User[];
+  parentComment?: Comment;
+  childComments: Comment[];
+};
+
 interface PostProps {
   post: extendedPost;
   currentUser: SafeUser;

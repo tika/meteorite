@@ -3,6 +3,7 @@ import { NotFound } from "@app/exceptions";
 import { JWT } from "@app/jwt";
 import { prisma } from "@app/prisma";
 import { createCommentSchema } from "@schemas/posts";
+import { DisplayedError } from '../../../../app/exceptions';
 
 // GET (comments on post) => [ comment, comment1 ]
 // [Auth] PUT, { content: string, parentId: string } => comment
@@ -49,6 +50,10 @@ export default createEndpoint({
 
       if (!parentComment) {
         throw new NotFound("parent comment");
+      }
+
+      if (parentComment.postId !== postId) {
+        throw new DisplayedError(422, "post ids");
       }
     }
 

@@ -8,9 +8,14 @@ import { Bullet } from "./svg/bullet";
 import { Heart } from "./svg/heart";
 import { Chat } from "./svg/chat";
 
-export function CommentElement({ comment }: { comment: extendedComment }) {
+interface CommentProps {
+  comment: extendedComment;
+  hideCommentIcon?: boolean;
+}
+
+export function CommentElement(props: CommentProps) {
   const { data, error } = useSWR<SafeUser>(
-    `/users?id=${comment.authorId}`,
+    `/users?id=${props.comment.authorId}`,
     (url) => fetcher("GET", url)
   );
 
@@ -38,13 +43,13 @@ export function CommentElement({ comment }: { comment: extendedComment }) {
               <p className="font-semibold">@{data.username}</p>
               <Bullet />
               <p className="font-semibold text-sm text-gray-600">
-                {autoDatify(new Date(comment.createdAt))}
+                {autoDatify(new Date(props.comment.createdAt))}
               </p>
             </div>
             <div
               onClick={() => !expanded && setExpanded(true)}
               className={`line-clamp-${expanded ? "none" : "2"}`}>
-              {comment.content
+              {props.comment.content
                 .trim()
                 .split("\n")
                 .map((line) => {
@@ -59,12 +64,14 @@ export function CommentElement({ comment }: { comment: extendedComment }) {
             <div className="flex items-center w-full gap-4 mt-2">
               <div className="flex">
                 <Heart className="h-6" isLiked={false} onClick={() => null} />
-                {comment.likedBy.length} likes
+                {props.comment.likedBy.length} likes
               </div>
-              <div className="flex">
-                <Chat className="h-6" />
-                {comment.childComments.length} replies
-              </div>
+              {!props.hideCommentIcon && (
+                <div className="flex">
+                  <Chat className="h-6" />
+                  {props.comment.childComments.length} replies
+                </div>
+              )}
             </div>
           </div>
         </div>

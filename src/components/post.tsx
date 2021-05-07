@@ -28,6 +28,7 @@ export type extendedComment = Comment & {
   likedBy: User[];
   parentComment?: Comment;
   childComments: Comment[];
+  author?: User;
 };
 
 interface PostProps {

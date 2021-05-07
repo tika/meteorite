@@ -9,6 +9,7 @@ import { Popup, PopupState } from "@components/popup";
 import { CommentElement } from "@components/commentelement";
 import toast from "react-hot-toast";
 import { fetcher } from "@app/fetcher";
+import { Bullet } from "@components/svg/bullet";
 
 type CommentPageProps = {
   user: JWTPayload;
@@ -20,8 +21,6 @@ export default function PostPage(props: CommentPageProps) {
   const textarea = useRef<any | undefined>();
   const [content, setContent] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  // console.log(props.comments);
 
   const [popup, setPopup] = useState<PopupState>();
   const [popupData, setPopupData] = useState<any | undefined>();
@@ -38,26 +37,6 @@ export default function PostPage(props: CommentPageProps) {
     }
   }, [content]);
 
-  // async function postComment() {
-  //   setIsSubmitting(true);
-  //   if (!createCommentSchema.safeParse({ content }).success) {
-  //     setIsSubmitting(false);
-  //     return toast.error("Comments must have over 3 characters");
-  //   }
-  //   await toast
-  //     .promise(
-  //       fetcher("PUT", `/posts/${props.post.id}/comments`, { content }),
-  //       {
-  //         success: "Success",
-  //         loading: "Loading",
-  //         error: (e) => e.message || "Something went wrong...",
-  //       }
-  //     )
-  //     .catch(() => setIsSubmitting(false))
-  //     .finally(() => setContent(""));
-  //   setIsSubmitting(false);
-  // }
-
   console.log(props.replies);
 
   return (
@@ -72,7 +51,39 @@ export default function PostPage(props: CommentPageProps) {
       <Left user={props.user} onPost={() => setPopup("posting")} />
       <div className="flex justify-center col-span-12 sm:col-span-6">
         <div className="w-96 flex items-center flex-col py-8 gap-10 ">
-          <h1>{props.replies.length}</h1>
+          <CommentElement comment={props.comment} hideCommentIcon />
+          <div className="w-full bg-gray-500" style={{ height: "2px" }} />
+
+          <div className="flex w-full gap-2 flex-col">
+            <div className="flex gap-2 items-center">
+              <h1 className="font-semibold">{props.replies.length} replies</h1>
+              <Bullet className="text-gray-500" />
+              <h1 className="text-gray-500 cursor-pointer">
+                Sorted by <span className="text-blue-500">date</span>
+              </h1>
+            </div>
+            <div className="flex gap-4 items-center">
+              <div className="max-w-full max-h-sm">
+                <img
+                  src={profilePicture}
+                  className="w-16 h-16 max-w-none object-cover rounded-md"
+                />
+              </div>
+              <textarea
+                className="w-80 outline-none resize-none"
+                onChange={(e) => setContent(e.target.value)}
+                value={content}
+                ref={textarea}
+                placeholder={`Reply to @${props.comment.author?.username}`}
+              />
+            </div>
+          </div>
+
+          <div className="flex w-full flex-col gap-2">
+            {props.replies.map((reply) => (
+              <CommentElement comment={reply} hideCommentIcon />
+            ))}
+          </div>
         </div>
       </div>
       <Right />
@@ -88,6 +99,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     include: {
       likedBy: true,
       parentComment: true,
+      author: true,
       childComments: {
         include: {
           likedBy: true,

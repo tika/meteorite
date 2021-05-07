@@ -96,7 +96,8 @@ export default function ProfilePage(props: ProfileProps) {
                 <span className="text-gray-500 font-medium">Followers</span>
               </h1>
               <h1 className="font-semibold cursor-pointer">
-                52 <span className="text-gray-500 font-medium">Posts</span>
+                {props.posts.length}{" "}
+                <span className="text-gray-500 font-medium">Posts</span>
               </h1>
             </div>
             <div className="flex w-full justify-center mt-4">
@@ -140,6 +141,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   let posts = await prisma.post.findMany({
     where: { authorId: ctx.query.id as string },
+    include: { likedBy: true, savedBy: true },
   });
 
   let diffPosts: any[] = posts;

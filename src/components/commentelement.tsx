@@ -10,6 +10,7 @@ import { Chat } from "./svg/chat";
 
 interface CommentProps {
   comment: extendedComment;
+  currentUser: SafeUser;
   hideCommentIcon?: boolean;
 }
 
@@ -20,6 +21,10 @@ export function CommentElement(props: CommentProps) {
   );
 
   const [expanded, setExpanded] = useState(false);
+  const [isLiked, setIsLiked] = useState(
+    props.comment.likedBy.filter((u) => u.id === props.currentUser.id).length >
+      0
+  );
 
   const profilePicture =
     "https://images.pexels.com/photos/1704488/pexels-photo-1704488.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500";
@@ -63,7 +68,17 @@ export function CommentElement(props: CommentProps) {
             </div>
             <div className="flex items-center w-full gap-4 mt-2">
               <div className="flex">
-                <Heart className="h-6" isLiked={false} onClick={() => null} />
+                <Heart
+                  className="h-6"
+                  isLiked={isLiked}
+                  onClick={() => {
+                    fetcher(
+                      isLiked ? "DELETE" : "PUT",
+                      `/comments/likes/${props.comment.id}`
+                    );
+                    setIsLiked(!isLiked);
+                  }}
+                />
                 {props.comment.likedBy.length} likes
               </div>
               {!props.hideCommentIcon && (

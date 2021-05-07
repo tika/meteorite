@@ -2,13 +2,11 @@ import { GetServerSideProps } from "next";
 import { useEffect, useRef, useState } from "react";
 import { JWT, JWTPayload } from "@app/jwt";
 import { prisma } from "@app/prisma";
-import { extendedComment, extendedPost, PostElement } from "@components/post";
+import { extendedComment } from "@components/post";
 import { Left } from "@components/pages/left";
 import { Right } from "@components/pages/right";
 import { Popup, PopupState } from "@components/popup";
 import { CommentElement } from "@components/commentelement";
-import toast from "react-hot-toast";
-import { fetcher } from "@app/fetcher";
 import { Bullet } from "@components/svg/bullet";
 
 type CommentPageProps = {
@@ -20,7 +18,6 @@ type CommentPageProps = {
 export default function PostPage(props: CommentPageProps) {
   const textarea = useRef<any | undefined>();
   const [content, setContent] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [popup, setPopup] = useState<PopupState>();
   const [popupData, setPopupData] = useState<any | undefined>();
@@ -37,8 +34,6 @@ export default function PostPage(props: CommentPageProps) {
     }
   }, [content]);
 
-  console.log(props.replies);
-
   return (
     <div className="h-full grid grid-cols-12 max-w-full">
       {popup && (
@@ -50,11 +45,18 @@ export default function PostPage(props: CommentPageProps) {
       )}
       <Left user={props.user} onPost={() => setPopup("posting")} />
       <div className="flex justify-center col-span-12 sm:col-span-6">
-        <div className="w-96 flex items-center flex-col py-8 gap-10 ">
-          <CommentElement comment={props.comment} hideCommentIcon />
-          <div className="w-full bg-gray-500" style={{ height: "2px" }} />
+        <div className="w-96 flex items-center flex-col py-8 gap-10">
+          <CommentElement
+            currentUser={props.user}
+            comment={props.comment}
+            hideCommentIcon
+          />
 
           <div className="flex w-full gap-2 flex-col">
+            <div
+              className="w-full bg-gray-500 mt-4"
+              style={{ height: "2px" }}
+            />
             <div className="flex gap-2 items-center">
               <h1 className="font-semibold">{props.replies.length} replies</h1>
               <Bullet className="text-gray-500" />
@@ -81,7 +83,11 @@ export default function PostPage(props: CommentPageProps) {
 
           <div className="flex w-full flex-col gap-2">
             {props.replies.map((reply) => (
-              <CommentElement comment={reply} hideCommentIcon />
+              <CommentElement
+                currentUser={props.user}
+                comment={reply}
+                hideCommentIcon
+              />
             ))}
           </div>
         </div>

@@ -56,6 +56,10 @@ export function PostElement(props: PostProps) {
   const profilePicture =
     "https://images.pexels.com/photos/1704488/pexels-photo-1704488.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500";
 
+  console.log("ok");
+
+  console.log(props.post);
+
   const [isLiked, setIsLiked] = useState(
     props.post.likedBy.filter((u) => u.id === props.currentUser.id).length > 0
   );

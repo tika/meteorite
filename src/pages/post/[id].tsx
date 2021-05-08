@@ -7,7 +7,7 @@ import { Left } from "@components/pages/left";
 import { Right } from "@components/pages/right";
 import { Popup, PopupState } from "@components/popup";
 import { CommentElement } from "@components/commentelement";
-import { createCommentSchema } from "../../../schemas/posts";
+import { createCommentSchema } from "@schemas/posts";
 import toast from "react-hot-toast";
 import { fetcher } from "@app/fetcher";
 
@@ -114,7 +114,7 @@ export default function PostPage(props: PostPageProps) {
           <div className="w-full bg-gray-500 -mt-4" style={{ height: "1px" }} />
           <div className="flex w-full flex-col gap-4">
             {props.comments.map((comment) => (
-              <CommentElement comment={comment} />
+              <CommentElement currentUser={props.user} comment={comment} />
             ))}
           </div>
         </div>
@@ -143,8 +143,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       notFound: true,
     };
   }
-
-  console.log(post.comments);
 
   return {
     props: {

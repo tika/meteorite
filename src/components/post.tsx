@@ -15,6 +15,7 @@ import { useRouter } from "next/dist/client/router";
 import copy from "copy-to-clipboard";
 import { url } from "@app/constants";
 import toast from "react-hot-toast";
+import { Multiline } from "@app/elementutils";
 
 export type SafeUser = Omit<User, "password" | "email">;
 
@@ -34,7 +35,6 @@ export type extendedComment = Comment & {
 interface PostProps {
   post: extendedPost;
   currentUser: SafeUser;
-  key: string;
   onComment(): void;
 }
 
@@ -55,10 +55,6 @@ export function PostElement(props: PostProps) {
 
   const profilePicture =
     "https://images.pexels.com/photos/1704488/pexels-photo-1704488.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500";
-
-  console.log("ok");
-
-  console.log(props.post);
 
   const [isLiked, setIsLiked] = useState(
     props.post.likedBy.filter((u) => u.id === props.currentUser.id).length > 0
@@ -85,7 +81,7 @@ export function PostElement(props: PostProps) {
           <HashLoader color="#3B82F6" loading={!data} size={100} />
         </div>
       ) : (
-        <div className="w-96" key={props.key}>
+        <div className="w-96" key={props.post.id}>
           {props.post.images && props.post.images.length > 0 ? (
             <ImagePost props={passProps} />
           ) : (
@@ -125,17 +121,7 @@ export function TextPost({ props }: { props: PassedProps }) {
           </h2>
         </div>
         <div onClick={() => router.push(`/post/${props.post.id}`)}>
-          {props.post.caption
-            ?.trim()
-            .split("\n")
-            .map((line) => {
-              return (
-                <>
-                  <p className="text-md break-words">{line}</p>
-                  {line === "" && <br />}
-                </>
-              );
-            })}
+          <Multiline text={props.post.caption!} lineclamp={1} expanded />
         </div>
         <div className="flex mt-2 justify-between w-full">
           <Heart
@@ -195,6 +181,7 @@ export function ImagePost({ props }: { props: PassedProps }) {
             <div className="mr-2 px-1 py-3 z-20 flex flex-col gap-2 bg-gray-900 opacity-90 rounded-full">
               {props.post.images.map((x, i) => (
                 <div
+                  key={i}
                   className={`w-2 h-2 transition ease-in-out duration-500 ${
                     i === index ? "bg-blue-300" : "bg-gray-600"
                   } rounded-full`}
@@ -260,25 +247,12 @@ export function ImagePost({ props }: { props: PassedProps }) {
         </div>
 
         <div className="flex flex-col gap-1 w-full" style={{ width: "18rem" }}>
-          <div
-            onClick={() =>
-              expanded
-                ? router.push(`/post/${props.post.id}`)
-                : setExpanded(true)
-            }
-            className={`line-clamp-${expanded ? "none" : "3"}`}>
-            {props.post.caption
-              ?.trim()
-              .split("\n")
-              .map((line) => {
-                return (
-                  <>
-                    <p className="text-md break-words">{line}</p>
-                    {line === "" && <br />}
-                  </>
-                );
-              })}
-          </div>
+          <Multiline
+            onClick={() => setExpanded(true)}
+            text={props.post.caption!}
+            lineclamp={3}
+            expanded={expanded}
+          />
 
           <div>
             <div className="flex items-center">

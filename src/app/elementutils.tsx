@@ -1,6 +1,6 @@
 interface MultilineProps {
   text: string;
-  onClick(): void;
+  onClick?: () => void;
   className?: string;
   lineclamp: number;
   expanded: boolean;

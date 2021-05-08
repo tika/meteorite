@@ -1,5 +1,5 @@
 import { GetServerSideProps } from "next";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { JWT, JWTPayload } from "@app/jwt";
 import { prisma } from "@app/prisma";
 import { extendedPost, SafeUser } from "@components/post";
@@ -8,7 +8,7 @@ import { Right } from "@components/pages/right";
 import { Popup, PopupState } from "@components/popup";
 import { Fire } from "@components/svg/fire";
 import { Calendar } from "@components/svg/calendar";
-import { Pin } from "../../../components/svg/pin";
+import { Pin } from "@components/svg/pin";
 import { Dots } from "@components/svg/dots";
 import { Feed } from "@components/pages/feed";
 

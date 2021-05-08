@@ -11,7 +11,9 @@ datasource db {
 }
 
 model User {
-  id       String @id @default(cuid())
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+
   username String @unique @db.VarChar(255)
   email    String @unique @db.VarChar(255)
   password String @db.VarChar(255)
@@ -19,6 +21,10 @@ model User {
   // Followers
   followers  User[] @relation("UserFriendsUser", references: [id])
   followerOf User[] @relation("UserFriendsUser", references: [id])
+
+  // Blocked
+  blocked   User[] @relation("UserBlocksUser", references: [id])
+  blockedBy User[] @relation("UserBlocksUser", references: [id])
 
   // Posts
   posts      Post[] @relation("UserAuthorsPost")
@@ -32,15 +38,25 @@ model User {
   sentNotifications Notification[] @relation("UserAuthorsNotification")
   notifications     Notification[] @relation("UserNotified")
 
-  savedPosts Post[] @relation("UserSavesPost")
+  savedPosts Post[]    @relation("UserSavesPost")
+  Profile    Profile[]
+}
+
+model Profile {
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id])
+
+  avatar   String
+  bio      String
+  location String
 }
 
 model Post {
   id        String   @id @default(cuid())
-  caption   String?  @db.VarChar(2000)
   createdAt DateTime @default(now())
 
-  images String[]
+  caption String?  @db.VarChar(2000)
+  images  String[]
 
   author   User   @relation("UserAuthorsPost", fields: [authorId], references: [id])
   authorId String
@@ -53,8 +69,9 @@ model Post {
 
 model Comment {
   id        String   @id @default(cuid())
-  content   String   @db.VarChar(256)
   createdAt DateTime @default(now())
+
+  content String @db.VarChar(256)
 
   post   Post   @relation("PostHasComment", fields: [postId], references: [id])
   postId String
@@ -70,7 +87,8 @@ model Comment {
 }
 
 model Notification {
-  id String @id @default(cuid())
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
 
   contentId   String
   contentType String

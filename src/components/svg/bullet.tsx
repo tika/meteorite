@@ -11,7 +11,7 @@ export function Bullet({ onClick, className }: IconProps) {
       xmlns="http://www.w3.org/2000/svg"
       className={className}
       onClick={onClick}>
-      <circle cx="2" cy="2" r="2" fill="black" fill-opacity="0.27" />
+      <circle cx="2" cy="2" r="2" fill="black" fillOpacity="0.27" />
     </svg>
   );
 }

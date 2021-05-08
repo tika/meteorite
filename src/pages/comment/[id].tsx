@@ -84,6 +84,7 @@ export default function PostPage(props: CommentPageProps) {
           <div className="flex w-full flex-col gap-2">
             {props.replies.map((reply) => (
               <CommentElement
+                key={reply.id}
                 currentUser={props.user}
                 comment={reply}
                 hideCommentIcon

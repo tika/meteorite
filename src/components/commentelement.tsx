@@ -7,6 +7,7 @@ import HashLoader from "react-spinners/HashLoader";
 import { Bullet } from "./svg/bullet";
 import { Heart } from "./svg/heart";
 import { Chat } from "./svg/chat";
+import { Multiline } from "@app/elementutils";
 
 interface CommentProps {
   comment: extendedComment;
@@ -51,21 +52,12 @@ export function CommentElement(props: CommentProps) {
                 {autoDatify(new Date(props.comment.createdAt))}
               </p>
             </div>
-            <div
+            <Multiline
+              text={props.comment.content}
               onClick={() => !expanded && setExpanded(true)}
-              className={`line-clamp-${expanded ? "none" : "2"}`}>
-              {props.comment.content
-                .trim()
-                .split("\n")
-                .map((line) => {
-                  return (
-                    <>
-                      <p className="text-md break-words">{line}</p>
-                      {line === "" && <br />}
-                    </>
-                  );
-                })}
-            </div>
+              lineclamp={2}
+              expanded={expanded}
+            />
             <div className="flex items-center w-full gap-4 mt-2">
               <div className="flex">
                 <Heart

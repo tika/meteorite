@@ -11,6 +11,7 @@ import { Calendar } from "@components/svg/calendar";
 import { Pin } from "@components/svg/pin";
 import { Dots } from "@components/svg/dots";
 import { Feed } from "@components/pages/feed";
+import { useRouter } from "next/dist/client/router";
 
 type ProfileProps = {
   user: JWTPayload;
@@ -21,6 +22,7 @@ type ProfileProps = {
 export default function ProfilePage(props: ProfileProps) {
   const [popup, setPopup] = useState<PopupState>();
   const [popupData, setPopupData] = useState<any | undefined>();
+  const router = useRouter();
 
   const profileBanner =
     "https://www.onthegotours.com/blog/wp-content/uploads/2019/08/Oasis-over-Sand-dunes-in-Erg-Chebbi-of-Sahara-desert-in-Morocco-Africa.jpg";
@@ -28,7 +30,10 @@ export default function ProfilePage(props: ProfileProps) {
   const profilePicture =
     "https://images.pexels.com/photos/1704488/pexels-photo-1704488.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500";
 
-  useEffect(() => window.scrollTo(0, 0), []); // Scroll to top
+  useEffect(() => {
+    if (!props.user) router.push("/");
+    window.scrollTo(0, 0); // Scroll to top
+  }, [props]);
 
   return (
     <div className="h-full grid grid-cols-12 max-w-full">

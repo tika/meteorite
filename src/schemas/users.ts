@@ -24,3 +24,7 @@ export const updateSchema = z.object({
 export const deleteSchema = z.object({
   password,
 });
+
+export const followSchema = z.object({
+  userId: z.string()
+});

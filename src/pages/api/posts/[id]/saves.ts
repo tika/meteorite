@@ -2,6 +2,7 @@ import { createEndpoint } from "@app/endpoint";
 import { NotFound } from "@app/exceptions";
 import { JWT } from "@app/jwt";
 import { prisma } from "@app/prisma";
+import { santiseMany } from '@app/santise';
 
 export default createEndpoint({
   GET: async (req, res) => {
@@ -16,12 +17,7 @@ export default createEndpoint({
       throw new NotFound("post");
     }
 
-    const safeUsers = post.savedBy.map((user) => {
-      const { email, password, ...rest } = user;
-      return rest;
-    });
-
-    res.json({ savedBy: safeUsers });
+    res.json({ savedBy: santiseMany(post.savedBy) });
   },
   DELETE: async (req, res) => {
     const user = JWT.parseRequest(req);

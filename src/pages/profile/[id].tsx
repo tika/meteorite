@@ -12,6 +12,7 @@ import { Pin } from "@components/svg/pin";
 import { Dots } from "@components/svg/dots";
 import { Feed } from "@components/pages/feed";
 import { useRouter } from "next/dist/client/router";
+import { santiseUser, santisePosts } from "../../app/santise";
 
 type ProfileProps = {
   user: JWTPayload;
@@ -142,21 +143,16 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     };
   }
 
-  const { password, email, ...rest } = profile;
-
   let posts = await prisma.post.findMany({
     where: { authorId: ctx.query.id as string },
     include: { likedBy: true, savedBy: true },
   });
 
-  let diffPosts: any[] = posts;
-  diffPosts.map((p) => (p.createdAt = p.createdAt.toISOString()));
-
   return {
     props: {
       user,
-      profile: JSON.parse(JSON.stringify(rest)),
-      posts: JSON.parse(JSON.stringify(diffPosts)),
+      profile: JSON.parse(JSON.stringify(santiseUser(profile))),
+      posts: JSON.parse(JSON.stringify(santisePosts(posts))),
     },
   };
 };

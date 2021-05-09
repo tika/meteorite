@@ -21,9 +21,7 @@ export default createEndpoint({
       throw new NotFound("post");
     }
 
-    const comments = post.comments;
-
-    res.json({ comments: comments });
+    res.json({ comments: post.comments });
   },
   PUT: async (req, res) => {
     const user = JWT.parseRequest(req);

@@ -9,6 +9,7 @@ import { DisplayedError, MissingData, NotFound } from "@app/exceptions";
 import bcrypt from "bcrypt";
 import { JWT } from "@app/jwt";
 import { prisma } from "@app/prisma";
+import { santiseUser } from "@app/santise";
 
 export default createEndpoint({
   GET: async (req, res) => {
@@ -21,9 +22,7 @@ export default createEndpoint({
       throw new NotFound("user");
     }
 
-    const { password, email, ...rest } = user;
-
-    res.json(rest);
+    res.json({ user: santiseUser(user) });
   },
   PATCH: async (req, res) => {
     const user = JWT.parseRequest(req);
@@ -43,7 +42,9 @@ export default createEndpoint({
       data: { username, email, password: newPassword },
     });
 
-    res.status(200);
+    const newUser = await prisma.user.findFirst({ where: { id: user.id } });
+
+    res.json({ user: santiseUser(newUser!) });
   },
   POST: async (req, res) => {
     const { username, password } = loginSchema.parse(req.body);

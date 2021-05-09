@@ -7,6 +7,7 @@ import { Feed } from "@components/pages/feed";
 import { Left } from "@components/pages/left";
 import { Right } from "@components/pages/right";
 import { Popup, PopupState } from "@components/popup";
+import { santisePosts } from "@app/santise";
 
 type HomeProps = {
   user: JWTPayload;
@@ -85,8 +86,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     (p) => p.savedBy.filter((u) => u.id === user.id).length > 0
   );
 
-  let diffPosts: any[] = posts;
-  diffPosts.map((p) => (p.createdAt = p.createdAt.toISOString()));
-
-  return { props: { user, posts: JSON.parse(JSON.stringify(diffPosts)) } };
+  return {
+    props: { user, posts: JSON.parse(JSON.stringify(santisePosts(posts))) },
+  };
 };

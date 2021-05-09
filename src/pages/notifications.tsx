@@ -9,6 +9,7 @@ import { Notification, Post } from ".prisma/client";
 import { NotificationElement } from "../components/notificationelement";
 import { fetcher } from "@app/fetcher";
 import { SafeUser } from "@components/post";
+import { santiseUser } from "@app/santise";
 
 type NotificationProps = {
   user: JWTPayload;
@@ -93,12 +94,12 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   });
 
   notifications = await Promise.all(
-    notifications.map(async (n) => {
-      const t = await prisma.post.findFirst({ where: { id: n.contentId } });
-      n.content = t;
-      const { email, password, ...rest } = n.author;
-      n.author = rest;
-      return n;
+    notifications.map(async (notification) => {
+      notification.content = await prisma.post.findFirst({
+        where: { id: notification.contentId },
+      });
+      notification.author = santiseUser(notification.author);
+      return notification;
     })
   );
 

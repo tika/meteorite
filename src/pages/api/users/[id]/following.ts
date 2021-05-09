@@ -1,5 +1,6 @@
 import { createEndpoint } from "@app/endpoint";
 import { NotFound } from "@app/exceptions";
+import { santiseMany } from '../../../../app/santise';
 
 // GET (a list of people this user is following), { userId } => [{ user1, user2 }]
 
@@ -11,11 +12,6 @@ export default createEndpoint({
       throw new NotFound("user");
     }
 
-    const following = user.followerOf.map((u) => {
-      const { email, password, ...rest } = u;
-      return rest;
-    });
-
-    res.json({ following });
+    res.json({ following: santiseMany(user.followerOf) });
   }
 });

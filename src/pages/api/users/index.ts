@@ -22,7 +22,7 @@ export default createEndpoint({
       throw new NotFound("user");
     }
 
-    res.json({ user: santiseUser(user) });
+    res.json(santiseUser(user));
   },
   PATCH: async (req, res) => {
     const user = JWT.parseRequest(req);
@@ -44,7 +44,7 @@ export default createEndpoint({
 
     const newUser = await prisma.user.findFirst({ where: { id: user.id } });
 
-    res.json({ user: santiseUser(newUser!) });
+    res.json(santiseUser(newUser!));
   },
   POST: async (req, res) => {
     const { username, password } = loginSchema.parse(req.body);

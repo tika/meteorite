@@ -85,7 +85,7 @@ export default function PostPage(props: PostPageProps) {
             <p className="font-semibold">
               {props.post.comments.length} comments
             </p>
-            <p className="font-semibold">0 saves</p>
+            <p className="font-semibold">{props.post.savedBy.length} saves</p>
           </div>
           <div className="flex flex-col items-center gap-2">
             <div className="flex gap-4 items-center">

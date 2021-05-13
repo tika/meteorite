@@ -37,5 +37,34 @@ export default createEndpoint({
     const updatedMe = await prisma.user.findFirst({ where: { id: me.id }, include: { followerOf: true } });
 
     res.send({ following: updatedMe?.followerOf.map((u) => santiseUser(u)) });
+  },
+  DELETE: async (req, res) => {
+    const me = JWT.parseRequest(req);
+
+    if (!me) {
+      throw new Error("Unknown User");
+    }
+
+    const { userId } = followSchema.parse(req.body);
+
+    if (userId === me.id) {
+      throw new Error("You cannot unfollow yourself!");
+    }
+
+    const realUser = await prisma.user.findFirst({ where: { id: userId } });
+
+    if (!realUser) {
+      throw new NotFound("user to unfollow");
+    }
+
+    await prisma.user.update({ where: { id: me.id }, data: { 
+      followerOf: {
+        disconnect: { id: userId }
+      }
+    }});
+
+    const updatedMe = await prisma.user.findFirst({ where: { id: me.id }, include: { followerOf: true } });
+
+    res.send({ following: updatedMe?.followerOf.map((u) => santiseUser(u)) });
   }
 })

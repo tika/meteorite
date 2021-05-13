@@ -12,17 +12,22 @@ import { Pin } from "@components/svg/pin";
 import { Dots } from "@components/svg/dots";
 import { Feed } from "@components/pages/feed";
 import { useRouter } from "next/dist/client/router";
-import { santiseUser, santisePosts } from "../../app/santise";
+import { santiseUser, santisePosts } from "@app/santise";
+import { fetcher } from "@app/fetcher";
 
 type ProfileProps = {
   user: JWTPayload;
-  profile: SafeUser;
+  profile: SafeUser & {
+    followerOf: SafeUser[];
+    followers: SafeUser[];
+  };
   posts: extendedPost[];
 };
 
 export default function ProfilePage(props: ProfileProps) {
   const [popup, setPopup] = useState<PopupState>();
   const [popupData, setPopupData] = useState<any | undefined>();
+  const [follows, setFollows] = useState(false);
   const router = useRouter();
 
   const profileBanner =
@@ -58,7 +63,7 @@ export default function ProfilePage(props: ProfileProps) {
                 />
               </div>
               <div>
-                <h1 className="font-bold text-lg">@{props.user.username}</h1>
+                <h1 className="font-bold text-lg">@{props.profile.username}</h1>
                 <div className="flex items-center">
                   <Fire className="w-5" />
                   <h2 className="font-semibold text-sm">#14 in the world</h2>
@@ -85,20 +90,31 @@ export default function ProfilePage(props: ProfileProps) {
             </div>
             <div className="flex justify-between">
               <button
+                disabled={props.user.id === props.profile.id}
+                onClick={() => {
+                  fetcher(
+                    follows ? "DELETE" : "PUT",
+                    `/users/${props.user.id}/follow`,
+                    { userId: props.profile.id }
+                  );
+                  setFollows(!follows);
+                }}
                 type="button"
                 className="justify-center w-40 text-white items-center px-6 py-3 border border-transparent text-sm font-semibold rounded-full shadow-s bg-gray-900 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                Follow
+                {follows ? "Unfollow" : "Follow"}
               </button>
+
               <div className="rounded-full flex h-12 p-3 justify-center items-center bg-gray-900 cursor-pointer hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                 <Dots className="h-full text-white" />
               </div>
             </div>
             <div className="flex justify-between mt-5">
               <h1 className="font-semibold cursor-pointer">
-                164 <span className="text-gray-500 font-medium">Following</span>
+                {props.profile.followerOf.length}{" "}
+                <span className="text-gray-500 font-medium">Following</span>
               </h1>
               <h1 className="font-semibold cursor-pointer">
-                6.6M{" "}
+                {props.profile.followers.length}{" "}
                 <span className="text-gray-500 font-medium">Followers</span>
               </h1>
               <h1 className="font-semibold cursor-pointer">
@@ -115,7 +131,7 @@ export default function ProfilePage(props: ProfileProps) {
             {props.posts && (
               <Feed
                 posts={props.posts}
-                user={props.user}
+                user={props.profile}
                 setCommentingOnPost={(p) => {
                   setPopup("commenting");
                   setPopupData(p);
@@ -135,6 +151,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   let profile = await prisma.user.findFirst({
     where: { id: ctx.query.id as string },
+    include: { followerOf: true, followers: true },
   });
 
   if (!profile) {

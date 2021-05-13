@@ -1,4 +1,3 @@
-import { extendedPost } from '@components/post';
 import { User } from '@prisma/client';
 
 export function santiseUser(user: User) {
@@ -11,5 +10,5 @@ export function santiseMany(users: User[]) {
 }
 
 export function santisePosts(posts: any[]) { // Any type - we can mutate post.createdAt
-  return posts.map((p) => (p.createdAt = p.createdAt.toISOString()));
+  return posts; // posts.map((p) => (p.createdAt = p.createdAt.toISOString()))
 }

@@ -6,8 +6,6 @@ import "tailwindcss/tailwind.css";
 export default function App({ Component, pageProps, router }: AppProps) {
   const { message = null } = router.query as { message?: string };
 
-  console.log(router.asPath);
-
   useEffect(() => {
     if (message) toast(message);
     if (!["/", "/login", "/register"].includes(router.asPath)) {

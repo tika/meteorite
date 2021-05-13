@@ -52,31 +52,24 @@ export default function ProfilePage(props: ProfileProps) {
       )}
       <Left user={props.user} onPost={() => setPopup("posting")} />
       <div className="flex justify-center col-span-12 sm:col-span-6">
-        <div className="w-96 flex items-center flex-col py-8 gap-10">
+        <div className="w-96 flex items-center flex-col py-8 gap-4">
           <div className="relative flex justify-center">
-            <img src={profileBanner} className="object-cover rounded-md h-64" />
-            <div className="absolute px-4 w-5/6 py-2 bg-white rounded-lg -bottom-10 flex items-center gap-2">
-              <div className="max-w-full max-h-sm">
-                <img
-                  src={profilePicture}
-                  className="w-16 h-16 max-w-none object-cover rounded-md"
-                />
-              </div>
-              <div>
-                <h1 className="font-bold text-lg">@{props.profile.username}</h1>
-                <div className="flex items-center">
-                  <Fire className="w-5" />
-                  <h2 className="font-semibold text-sm">#14 in the world</h2>
-                </div>
-              </div>
+            <img src={profileBanner} className="object-cover h-64" />
+            <h1
+              style={{ writingMode: "vertical-rl" }}
+              className="absolute left-2 bottom-2 font-bold text-sm text-white transform rotate-180 z-20">
+              @{props.profile.username}
+            </h1>
+
+            <div className="max-w-full max-h-sm absolute left-10 rounded-md border-white border-4 -bottom-4">
+              <img
+                src={profilePicture}
+                className="w-20 h-20 max-w-none object-cover rounded-md"
+              />
             </div>
           </div>
           <div className="py-4 px-4 flex flex-col gap-4">
-            <p className="text-md font-medium">
-              Embedded software; CoderDojoDC; Creator and co-author of the
-              Nerves Project; Marathon running
-            </p>
-            <div className="flex justify-evenly">
+            <div className="flex justify-between">
               <div className="flex items-center gap-2">
                 <Pin className="h-6 text-blue-700" />
                 <h1 className="font-semibold">London</h1>
@@ -88,7 +81,12 @@ export default function ProfilePage(props: ProfileProps) {
                 </h1>
               </div>
             </div>
-            <div className="flex justify-between">
+            <p className="text-md font-medium">
+              Embedded software; CoderDojoDC; Creator and co-author of the
+              Nerves Project; Marathon running
+            </p>
+
+            <div className="flex gap-4 items-center">
               <button
                 disabled={props.user.id === props.profile.id}
                 onClick={() => {
@@ -104,9 +102,7 @@ export default function ProfilePage(props: ProfileProps) {
                 {follows ? "Unfollow" : "Follow"}
               </button>
 
-              <div className="rounded-full flex h-12 p-3 justify-center items-center bg-gray-900 cursor-pointer hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                <Dots className="h-full text-white" />
-              </div>
+              <Dots className="h-6 text-black" />
             </div>
             <div className="flex justify-between mt-5">
               <h1 className="font-semibold cursor-pointer">
